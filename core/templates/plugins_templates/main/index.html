@@ -15,14 +15,14 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/main">Home</a></li>
                 <li><a href="#">Login</a></li>
-                { % for i in plugins_list % }
-                { % endfor % }
+                {% for i in plugins_list %}
+                <li><a href="{{i[0]}}">{{i[1]}}</a></li>
+                {% endfor %}
             </ul>
             </div>
         </nav>
     </div>
     <br><br>
-    <h1>Hey,guys. this is the main page of XmediaCenter.</h1>
-    <h3>If you can see this, it means modules manager that works.</h3>
+    {{ renderText }}
 </body>
 </html>

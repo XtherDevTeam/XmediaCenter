@@ -19,7 +19,7 @@ def get_plugins_path_list():
         if type(path).__name__ == 'str' and path == 'denied':
             print('failed with denied')
         else:
-            ret.append(path)
+            ret.append([path,i.name])
     return ret
 
 def main():
