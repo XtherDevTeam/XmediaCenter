@@ -2,7 +2,7 @@ from types import CodeType
 import flask
 from flask.templating import render_template
 
-name = 'Login'
+name = 'Login/Logout'
 
 requestCPR = None
 
@@ -26,6 +26,8 @@ def get_plugins_path_list():
     return ret
 
 def idx_of_login():
+    if flask.session.get('userinfo') != None:
+        return flask.redirect('/api?action=logout')
     return render_template("plugins_templates/main/index.html",plugins_list=get_plugins_path_list(),renderText=flask.Markup(render_template('plugins_templates/Login/main.html')))
  
 def register(server:flask.Flask):

@@ -70,6 +70,10 @@ session_map = []
 def idx_of_root():
     return render_template(core.api.getAbsPath(config['default_page_path']))
 
+modules = []
+registered_api = {}
+registered_path = {}
+
 @server_obj.route("/api")
 def idx_of_api():
     action = flask.request.args.get('action')
@@ -91,15 +95,13 @@ def idx_of_api():
         return json.dumps({ 'status':'success', 'userinfo': flask.session['userinfo']})
     elif action == "logout":
         flask.session.clear()
-        return ""
+        return flask.redirect('/main')
+    elif registered_api.get(action) != None:
+        return modules[registered_api.get(action)].api_request(flask.request)
     else:
         return "no response"
 
 # module apis
-
-modules = []
-registered_api = {}
-registered_path = {}
 
 def wdnmd():
     return modules
