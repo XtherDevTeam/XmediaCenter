@@ -1,1 +1,8 @@
-<h1>Main Module Loader is working</h1>
+<div style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);">
+    {% if is_logined == false %}
+    <h3 style="color: white;">Please login before.</h3>
+    {% else %}
+    <h3 style="color: white;">Welcome {{username['u']}}</h3>
+    <p style="color: white;">Select a application in menubar and get started.</p>
+    {% endif %}
+</div>
