@@ -23,7 +23,7 @@ def get_plugins_path_list():
     return ret
 
 def main():
-    return render_template("plugins_templates/main/index.html",plugins_list=get_plugins_path_list())
+    return render_template("plugins_templates/main/index.html",plugins_list=get_plugins_path_list(),renderText=flask.Markup(render_template('plugins_templates/main/main.html')))
 
 def register(server:flask.Flask):
     print(requestCPR)

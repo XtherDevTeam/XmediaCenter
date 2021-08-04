@@ -76,13 +76,15 @@ def idx_of_api():
     if action == 'login':
         uinf = flask.request.args.get('userinfo').__str__()
         result = core.xmcp.parseUserInfo(uinf)
+        if storage_info['users'].count({ 'username': result['u'], 'pwd_encoded': result['p'] }) == 0:
+            return json.dumps({ 'status':'error','reason':'Invalid username or password' })
         idx = storage_info['users'].index({ 'username': result['u'], 'pwd_encoded': result['p'] })
         flask.session['userinfo'] = uinf[1:-1]
         #flask.session["time"] = time.time()
         # configure session lifetime
         flask.session.permanent = True
         server_obj.permanent_session_lifetime = 10*60
-        return ""
+        return json.dumps({ 'status':'success', 'userinfo': flask.session['userinfo']})
     elif action == 'checker':
         if flask.session.get('userinfo') == None:
             return json.dumps({ 'status':'error','reason':'Invalid Session' })

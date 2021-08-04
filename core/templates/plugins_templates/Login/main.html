@@ -1,0 +1,37 @@
+<script>
+function submit(){
+    var u=document.getElementById("username").value; 
+    var p=document.getElementById("password").value + "_XmediaCenter";
+    p = hex_md5(p);
+    var final = u + ":" + p;
+    final = btoa(final)
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", '/api?action=login&userinfo="' + final + '"', 0);
+    xmlhttp.send();
+    console.log(xmlhttp.responseText);
+    var response = JSON.parse(xmlhttp.responseText)
+    if(response["status"] == "error"){
+        alert('failed with ' + response['reason'] + '\nplease check your username and password then try again later.')
+    }else{
+        window.location = '/main'
+    }
+}
+</script>
+
+<div style="position: absolute;width: 25%;left: 50%;top: 50%;transform: translate(-50%, -50%);">
+    <center><h1 style="color: white;">
+        Login
+    </h1></center><br>
+    <form method="GET">
+        <div class="input-group">
+            <span class="input-group-addon" id="sizing-addon1">Username</span>
+            <input id="username" name="username" type="text" class="form-control" placeholder="" aria-describedby="basic-addon1">
+        </div>
+        <br>
+        <div class="input-group">
+            <span class="input-group-addon" id="sizing-addon2">Password</span>
+            <input id="password" name="password" type="password" class="form-control" placeholder="" aria-describedby="basic-addon1">
+        </div>
+        <center><a class="btn" style="color: white;" href="javascript:void(0);" onclick="submit();">Submit</a></center>
+    </form>
+</div>
