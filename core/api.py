@@ -16,6 +16,8 @@ class Stack(object):
         return len(self.stack)
 
 def getAbsPath(path:str):
+    if path == None:
+        return ''
     stk = Stack()
     temp = ''
     for i in path:

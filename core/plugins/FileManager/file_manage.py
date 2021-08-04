@@ -3,6 +3,9 @@ import os,sys,json,core.api,flask
 def get_file_list(path):
     return os.listdir('core/storage/' + core.api.getAbsPath(path))
 
+def is_directory(path:str):
+    return os.path.isdir('core/storage/' + core.api.getAbsPath(path))
+
 def response_with_file(path):
     if path[0] == '"':
         path = path[1:-1]

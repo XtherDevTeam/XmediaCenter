@@ -1,0 +1,44 @@
+<script>
+    //$("#upload").fileinput({'showUpload':false, 'previewFileType':'any'});
+    $("#upload").fileinput("upload");
+</script>
+<div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
+    {% if is_logined == false %}
+    <h1 style="width: 90%;margin: 0 auto;">Please login before.</h3>
+    {% else %}
+        <br>
+        <br>
+        <div class="panel-heading" style="width: 90%;margin: 0 auto;">
+            <h3 class="panel-title">Files</h3>
+        </div>
+        <div class="panel-body" style="width: 90%;margin: 0 auto;">
+            <form action="/api?action=fm_api&request=upload" enctype="multipart/form-data" method="POST">
+                <span class="input-group-text" id="basic-addon1">upload files</span>
+                <input id="upload" name="file" type="file" class="file" data-show-preview="false">
+            </form>
+        </div>
+        <table class="table" style="width: 90%;margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in filenames %}
+                <tr>
+                    <td>{{i}}</td>
+                    <td>
+                        <a href="javscript:void(0);" onclick="">Remove</a>
+                        <a href="javscript:void(0);" onclick="">Move to</a>
+                        <a href="javscript:void(0);" onclick="">Rename</a>
+                        <a href="javscript:void(0);" onclick="">Download</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <br>
+    {% endif %}
+</div>

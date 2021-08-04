@@ -74,7 +74,7 @@ modules = []
 registered_api = {}
 registered_path = {}
 
-@server_obj.route("/api")
+@server_obj.route("/api",methods=['POST','GET'])
 def idx_of_api():
     action = flask.request.args.get('action')
     if action == 'login':
@@ -97,6 +97,8 @@ def idx_of_api():
         flask.session.clear()
         return flask.redirect('/main')
     elif registered_api.get(action) != None:
+        if flask.session.get('userinfo') == None:
+            return json.dumps({ 'status':'error','reason':'Invalid Session' })
         return modules[registered_api.get(action)].api_request(flask.request)
     else:
         return "no response"
