@@ -9,7 +9,13 @@
         <br>
         <br>
         <div class="panel-heading" style="width: 90%;margin: 0 auto;">
-            <h3 class="panel-title">Files</h3>
+            <h3 class="panel-title">
+                {% if path == None%}
+                /
+                {% else %}
+                /{{path}}
+                {% endif %}
+            </h3>
         </div>
         <div class="panel-body" style="width: 90%;margin: 0 auto;">
             <form action="/api?action=fm_api&request=upload" enctype="multipart/form-data" method="POST">
@@ -27,12 +33,16 @@
             <tbody>
                 {% for i in filenames %}
                 <tr>
-                    <td>{{i}}</td>
+                    <td>{{i['filename']}}</td>
                     <td>
                         <a href="javscript:void(0);" onclick="">Remove</a>
                         <a href="javscript:void(0);" onclick="">Move to</a>
                         <a href="javscript:void(0);" onclick="">Rename</a>
+                        {% if i['type'] == 'file'%}
                         <a href="javscript:void(0);" onclick="">Download</a>
+                        {% else %}
+                        <a href="/fm?path={{path}}/{{i['filename']}}" onclick="">Open</a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

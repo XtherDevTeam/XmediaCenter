@@ -18,6 +18,8 @@ class Stack(object):
 def getAbsPath(path:str):
     if path == None:
         return ''
+    if path != '' and path[0] == '"':
+        path = path[1:-1]
     stk = Stack()
     temp = ''
     for i in path:

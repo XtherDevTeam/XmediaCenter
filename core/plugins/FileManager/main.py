@@ -53,6 +53,7 @@ def idx_of_fm():
                                     'plugins_templates/FileManager/main.html',
                                     is_logined = is_logined,
                                     user = user,
+                                    path = core.api.getAbsPath(flask.request.values.get('path')),
                                     filenames=core.plugins.FileManager.file_manage.get_file_list(core.api.getAbsPath(flask.request.values.get('path')))
                                 )
                             ))
