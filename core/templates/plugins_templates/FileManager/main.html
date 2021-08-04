@@ -56,6 +56,7 @@ function do_download(filename){
                 <span class="input-group-text" id="basic-addon1">upload files</span>
                 <input id="upload" name="file" type="file" class="file" data-show-preview="false">
             </form>
+            <a class="btn btn-primary" href="javascript:reload()" onclick="do_create_dir();" role="button">Create Directory</a>
         </div>
         <table class="table" style="width: 90%;margin: 0 auto;">
             <thead>
@@ -69,12 +70,12 @@ function do_download(filename){
                 <tr>
                     <td>{{i['filename']}}</td>
                     <td>
-                        <a href="javascript:location.reload()" onclick="do_remove('{{i['filename']}}')">Remove</a>
-                        <a href="javascript:location.reload()" onclick="do_rename('{{i['filename']}}')">Rename</a>
+                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_remove('{{i['filename']}}')">Remove</a>
+                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_rename('{{i['filename']}}')">Rename</a>
                         {% if i['type'] == 'file'%}
-                        <a href="javascript:location.reload()" onclick="do_download('{{i['filename']}}')">Download</a>
+                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_download('{{i['filename']}}')">Download</a>
                         {% else %}
-                        <a href="/fm?path={{path}}/{{i['filename']}}" onclick="">Open</a>
+                        <a href="/fm?path={{path}}/{{i['filename']}}" class="btn btn-primary" role="button" onclick="">Open</a>
                         {% endif %}
                     </td>
                 </tr>
