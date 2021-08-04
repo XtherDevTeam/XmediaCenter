@@ -1,4 +1,5 @@
 import os,sys,json,core.api,flask
+from posixpath import expanduser
 
 def is_directory(path:str):
     if path[0] == '"':
@@ -24,3 +25,32 @@ def get_file_list(path):
         else:
             final.append( { 'filename':i,'type':'file' } )
     return final
+
+def remove(path):
+    if path != '' and path[0] == '"':
+        path = path[1:-1]
+    if path == None:
+        return json.dumps({ 'status':'error','reason':'empty path detected' })
+    try:
+        if is_directory(path):
+            os.removedirs('core/storage/' + core.api.getAbsPath(path))
+        else:
+            os.remove('core/storage/' + core.api.getAbsPath(path))
+        return json.dumps({ 'status':'success' })
+    except Exception as e:
+        return json.dumps({ 'status':'error','reason':str(e) })
+
+def rename(path,newname):
+    if path != '' and path[0] == '"':
+        path = path[1:-1]
+    if path == None:
+        return json.dumps({ 'status':'error','reason':'empty path detected' })
+    if newname != '' and newname[0] == '"':
+        newname = newname[1:-1]
+    if newname == None:
+        return json.dumps({ 'status':'error','reason':'empty path detected' })
+    try:
+        os.rename('core/storage/' + core.api.getAbsPath(path),'core/storage/' + core.api.getAbsPath(newname))
+        return json.dumps({ 'status':'success' })
+    except Exception as e:
+        return json.dumps({ 'status':'error','reason':str(e) })

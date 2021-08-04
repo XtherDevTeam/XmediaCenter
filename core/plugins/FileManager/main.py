@@ -34,6 +34,10 @@ def api_request(request:flask.request):
         return core.plugins.FileManager.file_manage.response_with_file(request.args.get('path'))
     elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'is_dir':
         return core.plugins.FileManager.file_manage.is_directory(request.args.get('path'))
+    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'remove':
+        return core.plugins.FileManager.file_manage.remove(request.args.get('path'))
+    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'rename':
+        return core.plugins.FileManager.file_manage.rename(request.args.get('path'),request.args.get('new'))
     elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'upload':
         file = request.files.get("file")
         print('request of ' + file.filename)

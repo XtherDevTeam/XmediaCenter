@@ -1,6 +1,40 @@
 <script>
-    //$("#upload").fileinput({'showUpload':false, 'previewFileType':'any'});
-    $("#upload").fileinput("upload");
+//$("#upload").fileinput({'showUpload':false, 'previewFileType':'any'});
+$("#upload").fileinput("upload");
+function do_remove(filename){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", '/api?action=fm_api&request=remove&path="{{path}}/'+filename+'"', 0);
+    xmlhttp.send();
+    console.log(xmlhttp.responseText);
+    var response = JSON.parse(xmlhttp.responseText)
+    if(response["status"] == "error"){
+        alert('Failed with ' + response['reason'])
+    }
+    //document.execCommand('Refresh')
+}
+function do_rename(filename){
+    var newname = prompt('Input a new name or path:')
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", '/api?action=fm_api&request=rename&path="{{path}}/'+filename+'"&new="' + newname + '"', 0);
+    xmlhttp.send();
+    console.log(xmlhttp.responseText);
+    var response = JSON.parse(xmlhttp.responseText)
+    if(response["status"] == "error"){
+        alert('Failed with ' + response['reason'])
+    }
+    //document.execCommand('Refresh')
+}
+function do_download(filename){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", '/api?action=fm_api&request=download&path="{{path}}/'+filename+'"', 0);
+    xmlhttp.send();
+    console.log(xmlhttp.responseText);
+    var response = JSON.parse(xmlhttp.responseText)
+    if(response["status"] == "error"){
+        alert('Failed with ' + response['reason'])
+    }
+    //document.execCommand('Refresh')
+}
 </script>
 <div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
     {% if is_logined == false %}
@@ -35,11 +69,10 @@
                 <tr>
                     <td>{{i['filename']}}</td>
                     <td>
-                        <a href="javscript:void(0);" onclick="">Remove</a>
-                        <a href="javscript:void(0);" onclick="">Move to</a>
-                        <a href="javscript:void(0);" onclick="">Rename</a>
+                        <a href="javascript:location.reload()" onclick="do_remove('{{i['filename']}}')">Remove</a>
+                        <a href="javascript:location.reload()" onclick="do_rename('{{i['filename']}}')">Rename</a>
                         {% if i['type'] == 'file'%}
-                        <a href="javscript:void(0);" onclick="">Download</a>
+                        <a href="javascript:location.reload()" onclick="do_download('{{i['filename']}}')">Download</a>
                         {% else %}
                         <a href="/fm?path={{path}}/{{i['filename']}}" onclick="">Open</a>
                         {% endif %}
