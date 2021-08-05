@@ -37,11 +37,11 @@ current_playlist = [];
 current_index = 0;
 mode = 'm_normal'
 state = 0
-/* player end */
+
 function on_set_player_start(){
     player = document.getElementById('player')
     clbl = document.getElementById('current_lbl')
-    clbl.innerHTML = 'Current: '+ current_playlist[current_index];
+    clbl.innerHTML = 'Current: ' + current_playlist[current_index][0] + ' - ' + current_playlist[current_index][1] + ' - ' + current_playlist[current_index][2];
     player.src = current_playlist_url[current_index++];
 }
 
@@ -65,7 +65,7 @@ function on_next_song(){
     }else if(current_index==-1){
         current_index = current_playlist.length-1;
     }
-    document.getElementById('current_lbl').innerHTML = 'Current: '+ current_playlist[current_index];
+    document.getElementById('current_lbl').innerHTML = 'Current: '+ current_playlist[current_index][0] + ' - ' + current_playlist[current_index][1] + ' - ' + current_playlist[current_index][2];
     document.getElementById('player').src = current_playlist_url[current_index++];
     document.getElementById('player').play()
 }
@@ -80,13 +80,15 @@ function player_start_with_playlist(mode = 'm_normal'){
     current_playlist = []
     current_playlist_url = []
     {% for i in info['playlist'] %}
-    current_playlist.push('{{i['title']}}');
+    current_playlist.push(['{{i['title']}}','{{i['album']}}','{{i['performer']}}']);
     current_playlist_url.push('/api?action=fm_api&request=download&path={{i['path']}}');
     {% endfor %}
     document.getElementById('player').onended = function(){
         on_next_song()
     }
 }
+
+/* player end */
 
 </script>
 
