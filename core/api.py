@@ -39,7 +39,7 @@ def getAbsPath(path:str):
     
     stk.push(temp)
     temp = ''
-    print(stk.empty())
+    #print(stk.empty())
     while stk.empty():
         temp = stk.top() + '/' + temp
         stk.pop()

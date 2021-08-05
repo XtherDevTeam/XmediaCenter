@@ -1,0 +1,56 @@
+<script>
+function do_import(){
+    path = prompt('Input music file path in storage')
+    if(path == null){
+        alert('Canceled.')
+        return;
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=music_api&request=add_song&pid={{pid}}&path=' + path,0);
+    xmlhttp.send();
+    var result = JSON.parse(xmlhttp.responseText);
+    if(result['status'] == 'error'){
+        alert('Failed with ' + result['reason']);
+    }
+}
+function do_open(){
+
+}
+</script>
+
+<div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
+    <div style="margin: auto auto;">
+        <br><br>
+        {% if is_logined == False %}
+        <center><h1>
+            Please login before.
+        </h1></center>
+        {% else %}
+        <div class="panel-heading" style="width: 90%;margin: 0 auto;">
+            <h3> {{name}} </h3>
+        </div>
+        <div class="panel-body" style="width: 90%;margin: 0 auto;">
+            <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_import()" role="button">Import song</a>
+            <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_open()" role="button">Open with music player</a>
+            <br><br>
+            <table class="table" style="margin: 0 auto;">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Album</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in info['playlist'] %}
+                    <tr>
+                        <td><a href="/music/player/{{i['name']}}">{{i['title']}}</a></td>
+                        <td>{{i['album']}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        <br><br>
+    </div>
+</div>

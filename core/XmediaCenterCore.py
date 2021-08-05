@@ -111,7 +111,6 @@ def wdnmd():
 def load_all_modules():
     for i in storage_info['modules']:
         modules.append(importlib.import_module('core.plugins.' + i + '.main'))
-        print(id(modules))
         modules[-1].requestCPR = wdnmd
         register_obj = modules[-1].register(server_obj)
         if type(register_obj).__name__ == 'dict':
@@ -131,6 +130,6 @@ def run():
     status = "running"
     server_obj.config['SECRET_KEY'] = '_XmediaCenter_' + str(os.urandom(114514))
     server_obj.session_cookie_name = 'XmediaCenterSession'
-    print(core.xmcp.makeUserInfomation(storage_info['users'][0]))
+    #print(core.xmcp.makeUserInfomation(storage_info['users'][0]))
     server_obj.run(host=config['host'],port=config['port'])
     status = "stopped"

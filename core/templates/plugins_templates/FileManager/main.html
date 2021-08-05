@@ -2,6 +2,9 @@
 //$("#upload").fileinput({'showUpload':false, 'previewFileType':'any'});
 $("#upload").fileinput("upload");
 function do_remove(filename){
+    if(filename == ""){
+        alert('Failed with empty filename')
+    }
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", '/api?action=fm_api&request=remove&path="{{path}}/'+filename+'"', 0);
     xmlhttp.send();
@@ -15,7 +18,19 @@ function do_remove(filename){
 function do_rename(filename){
     var newname = prompt('Input a new name or path:')
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", '/api?action=fm_api&request=rename&path="{{path}}/'+filename+'"&new="' + newname + '"', 0);
+    xmlhttp.open("GET", '/api?action=fm_api&request=rename&path="{{path}}/'+filename+'"&new="{{path}}/' + newname + '"', 0);
+    xmlhttp.send();
+    console.log(xmlhttp.responseText);
+    var response = JSON.parse(xmlhttp.responseText)
+    if(response["status"] == "error"){
+        alert('Failed with ' + response['reason'])
+    }
+    //document.execCommand('Refresh')
+}
+function do_create_dir(filename){
+    var newname = prompt('Input a directory name:')
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", '/api?action=fm_api&request=create_dir&path="{{path}}/'+ newname +'"', 0);
     xmlhttp.send();
     console.log(xmlhttp.responseText);
     var response = JSON.parse(xmlhttp.responseText)
@@ -25,15 +40,12 @@ function do_rename(filename){
     //document.execCommand('Refresh')
 }
 function do_download(filename){
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", '/api?action=fm_api&request=download&path="{{path}}/'+filename+'"', 0);
-    xmlhttp.send();
-    console.log(xmlhttp.responseText);
-    var response = JSON.parse(xmlhttp.responseText)
-    if(response["status"] == "error"){
-        alert('Failed with ' + response['reason'])
-    }
+    window.open('/api?action=fm_api&request=download&path="{{path}}/'+filename+'"')
     //document.execCommand('Refresh')
+}
+function back_to_last(){
+    last='{{path}}/../'
+    window.location = '/fm?path="'+last+'"'
 }
 </script>
 <div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
@@ -52,11 +64,12 @@ function do_download(filename){
             </h3>
         </div>
         <div class="panel-body" style="width: 90%;margin: 0 auto;">
-            <form action="/api?action=fm_api&request=upload" enctype="multipart/form-data" method="POST">
+            <form action="/api?action=fm_api&request=upload&path={{path}}/" enctype="multipart/form-data" method="POST">
                 <span class="input-group-text" id="basic-addon1">upload files</span>
                 <input id="upload" name="file" type="file" class="file" data-show-preview="false">
             </form>
-            <a class="btn btn-primary" href="javascript:reload()" onclick="do_create_dir();" role="button">Create Directory</a>
+            <a class="btn btn-primary" href="javascript:back_to_last();" onclick=";" role="button">Back to last</a>
+            <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_create_dir();" role="button">Create Directory</a>
         </div>
         <table class="table" style="width: 90%;margin: 0 auto;">
             <thead>
