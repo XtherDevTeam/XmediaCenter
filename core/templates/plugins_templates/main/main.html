@@ -1,8 +1,10 @@
-<div style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);">
+<div style="margin: 0 auto;">
+    <center>
     {% if is_logined == false %}
     <h1 style="color: white;">Please login before.</h3>
     {% else %}
     <h1 style="color: white;">Welcome,{{username['u']}}</h3>
     <h3 style="color: white;">Select an application in menubar and get started.</h3>
+    </center>
     {% endif %}
 </div>

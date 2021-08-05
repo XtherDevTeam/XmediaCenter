@@ -15,17 +15,18 @@ function do_add_playlist(){
     //document.execCommand('Refresh')
 }
 
-function do_import(path){
+function do_import(path,pname = null){
     if(path == null){
         alert('Canceled.')
         return;
     }
-    var pname = prompt('Input playlist name:')
-    if(path == null){
+    if(pname == null){pname = prompt('Input playlist name:')}
+    if(pname == null){
         alert('Canceled.')
         return;
     }
-
+    path = path.replace('&amp;','%26') // fuck you,url encode
+    alert(path)
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open('GET','/api?action=music_api&request=get_playlist_id&name=' + pname,0);
     xmlhttp.send()

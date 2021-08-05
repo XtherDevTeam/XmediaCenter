@@ -53,6 +53,17 @@ function back_to_last(){
 <script src='static/plugins_statics/MusicPlayer/music_api.js'></script>
 {% endif %}
 
+<script>
+function do_import_all() {
+    var pname = prompt('Input playlist name:')
+    {% for i in filenames %}
+    {% if i['type'] == 'file' and i['mime'][0:5] == 'audio' %}
+    do_import('"{{path}}/{{i['filename']}}"',pname)
+    {% endif %}
+    {% endfor %}
+}
+</script>
+
 <div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
     {% if is_logined == false %}
     <h1 style="width: 90%;margin: 0 auto;">Please login before.</h3>
@@ -75,6 +86,9 @@ function back_to_last(){
             </form>
             <a class="btn btn-primary" href="javascript:back_to_last();" onclick=";" role="button">Back to last</a>
             <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_create_dir();" role="button">Create Directory</a>
+            {% if modules_list.count('MusicPlayer') != 0 %}
+            <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_import_all();" role="button">Import all music to playlist</a>
+            {% endif %}
         </div>
         <table class="table" style="width: 90%;margin: 0 auto;">
             <thead>

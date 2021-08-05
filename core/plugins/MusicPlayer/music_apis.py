@@ -33,11 +33,16 @@ def create_playlist(name:str):
 
 def append_songs(pid:int,path:str):
     try:
+        print('path:',path)
+        if path != None and path[0] == '"':
+            path = path[1:-1]
         pls = get_playlists()
         if pls['status'] == 'error':
             return pls
         elif len(pls['playlists']) <= pid:
             return {'status':'error','reason':'Out of range'}
+        elif pls['playlists'][pid]['songs'].count(path):
+            return {'status':'success'}
         pls['playlists'][pid]['songs'].append(path)
         return sync_playlists(pls)
     except Exception as e:

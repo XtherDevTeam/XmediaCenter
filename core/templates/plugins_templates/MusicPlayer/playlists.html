@@ -43,8 +43,6 @@ function on_set_player_start(){
     clbl = document.getElementById('current_lbl')
     clbl.innerHTML = 'Current: '+ current_playlist[current_index];
     player.src = current_playlist_url[current_index++];
-    state = !state
-    player.play()
 }
 
 function on_change_state(){
@@ -54,6 +52,19 @@ function on_change_state(){
 }
 
 function on_next_song(){
+    if(current_index==current_playlist.length){
+        if(mode != 'm_loop'){
+            mode = 'm_stop';
+            current_index = 0;
+            document.getElementById('player').src = '';
+            document.getElementById('current_lbl').innerHTML = 'Current: ';
+            return;
+        }else{
+            current_index = 0;
+        }
+    }else if(current_index==-1){
+        current_index = current_playlist.length-1;
+    }
     document.getElementById('current_lbl').innerHTML = 'Current: '+ current_playlist[current_index];
     document.getElementById('player').src = current_playlist_url[current_index++];
     document.getElementById('player').play()
@@ -66,13 +77,16 @@ function on_prev_song() {
 
 function player_start_with_playlist(mode = 'm_normal'){
     mode = mode;
+    current_playlist = []
+    current_playlist_url = []
     {% for i in info['playlist'] %}
     current_playlist.push('{{i['title']}}');
     current_playlist_url.push('/api?action=fm_api&request=download&path={{i['path']}}');
     {% endfor %}
-    on_set_player_start()
+    document.getElementById('player').onended = function(){
+        on_next_song()
+    }
 }
-
 
 </script>
 
@@ -88,11 +102,10 @@ function player_start_with_playlist(mode = 'm_normal'){
             <h3> {{name}} </h3>
         </div>
         <div class="panel-body" style="width: 90%;margin: 0 auto;">
-            <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_import()" role="button">Import song</a>
-            <a class="btn btn-primary" href="#" onclick="player_start_with_playlist('m_loop')" role="button">Start playing</a><br><br>
+            <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_import()" role="button">Import song</a><br>
             <div class="music_player">
                 <h5 id="current_lbl">Current: </h5>
-                <audio id="player" src="" style="width: 100%;"></audio>
+                <audio id="player" class="player" src="" style="width: 100%;"></audio>
                 <a class="btn btn-primary" href="#" onclick="on_change_state()" role="button">Play/Pause</a>
                 <a class="btn btn-primary" href="#" onclick="on_next_song()" role="button">Next</a>
                 <a class="btn btn-primary" href="#" onclick="on_prev_song()" role="button">Prev</a>
@@ -110,7 +123,7 @@ function player_start_with_playlist(mode = 'm_normal'){
                 <tbody>
                     {% for i in info['playlist'] %}
                     <tr>
-                        <td><a href="/music/player/{{i['name']}}">{{i['title']}}</a></td>
+                        <td><a href="#" onclick="current_index=current_playlist.indexOf('{{i['title']}}');on_next_song();">{{i['title']}}</a></td>
                         <td>{{i['album']}}</td>
                         <td>{{i['performer']}}</td>
                         <td>
@@ -121,6 +134,11 @@ function player_start_with_playlist(mode = 'm_normal'){
                 </tbody>
             </table>
         </div>
+        <script>
+            document.getElementById('player').load()
+            player_start_with_playlist()
+            on_set_player_start()
+        </script>
         {% endif %}
         <br><br>
     </div>
