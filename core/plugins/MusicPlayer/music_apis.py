@@ -43,6 +43,28 @@ def append_songs(pid:int,path:str):
     except Exception as e:
         return {'status':'error','reason':str(e)}
 
+def remove_song(pid:int,path:str):
+    try:
+        pls = get_playlists()
+        if pls['status'] == 'error':
+            return pls
+        if pls['playlists'][pid]['songs'].count(path) == 0:
+            return {'status':'error','reason':'song is not in list'}
+        del pls['playlists'][pid]['songs'][pls['playlists'][pid]['songs'].index(path)]
+        return sync_playlists(pls)
+    except Exception as e:
+        return {'status':'error','reason':str(e)}
+
+def remove_playlist(pid:int):
+    try:
+        pls = get_playlists()
+        if pls['status'] == 'error':
+            return pls
+        del pls['playlists'][pid]
+        return sync_playlists(pls)
+    except Exception as e:
+        return {'status':'error','reason':str(e)}
+
 def get_playlist_id(name:str):
     if name == None:
         return {'status':'error','reason':'Invalid playlist name'}

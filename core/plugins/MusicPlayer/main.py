@@ -54,6 +54,19 @@ def api_request(request:flask.request):
             return json.dumps({'status':'error','reason':'unknown request'})
         pid = int(pid)
         return json.dumps(core.plugins.MusicPlayer.music_apis.append_songs(pid,path))
+    elif request_item == 'remove_song':
+        pid = request.values.get('pid')
+        path = request.values.get('path') # already is abs path
+        if pid == None or path == None:
+            return json.dumps({'status':'error','reason':'unknown request'})
+        pid = int(pid)
+        return json.dumps(core.plugins.MusicPlayer.music_apis.remove_song(pid,path))
+    elif request_item == 'remove_playlist':
+        pid = request.values.get('pid')
+        if pid == None:
+            return json.dumps({'status':'error','reason':'unknown request'})
+        pid = int(pid)
+        return json.dumps(core.plugins.MusicPlayer.music_apis.remove_playlist(pid))
     
 
 def idx_of_music():

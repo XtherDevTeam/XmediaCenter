@@ -48,6 +48,11 @@ function back_to_last(){
     window.location = '/fm?path="'+last+'"'
 }
 </script>
+
+{% if modules_list.count('MusicPlayer') != 0 %}
+<script src='static/plugins_statics/MusicPlayer/music_api.js'></script>
+{% endif %}
+
 <div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
     {% if is_logined == false %}
     <h1 style="width: 90%;margin: 0 auto;">Please login before.</h3>
@@ -87,6 +92,14 @@ function back_to_last(){
                         <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_rename('{{i['filename']}}')">Rename</a>
                         {% if i['type'] == 'file'%}
                         <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_download('{{i['filename']}}')">Download</a>
+                        {% if modules_list.count('MusicPlayer') != 0 %}
+
+                        {% if i['mime'][0:5] == 'audio' %}
+                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_import('{{path}}/{{i['filename']}}')">Import to playlist</a>
+                        {% endif %}
+
+                        {% endif %}
+
                         {% else %}
                         <a href="/fm?path={{path}}/{{i['filename']}}" class="btn btn-primary" role="button" onclick="">Open</a>
                         {% endif %}

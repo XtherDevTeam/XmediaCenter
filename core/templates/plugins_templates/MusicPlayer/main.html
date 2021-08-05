@@ -15,6 +15,17 @@ function do_add_playlist(){
     }
     //document.execCommand('Refresh')
 }
+function do_remove_playlist(pid){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", '/api?action=music_api&request=remove_playlist&pid='+String(pid), 0);
+    xmlhttp.send();
+    console.log(xmlhttp.responseText);
+    var response = JSON.parse(xmlhttp.responseText)
+    if(response["status"] == "error"){
+        alert('Failed with ' + response['reason'])
+    }
+    //document.execCommand('Refresh')
+}
 </script>
 
 <div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
@@ -37,12 +48,16 @@ function do_add_playlist(){
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for i in playlists['playlists'] %}
                     <tr>
                         <td><a href="/music/playlists/{{i['name']}}">{{i['name']}}</a></td>
+                        <td>
+                            <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_remove_playlist({{playlists['playlists'].index(i)}})" role="button">Remove playlist</a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

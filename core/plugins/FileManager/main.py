@@ -27,6 +27,12 @@ def get_plugins_path_list():
             ret.append([path,i.name])
     return ret
 
+def get_plugins_names():
+    ret = []
+    for i in requestCPR():
+        ret.append(i.name)
+    return ret
+
 def api_request(request:flask.request):
     if type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'get_filelist':
         return json.dumps(core.plugins.FileManager.file_manage.get_file_list(request.args.get('path')))
@@ -63,7 +69,8 @@ def idx_of_fm():
                                             is_logined = is_logined,
                                             user = user,
                                             path = core.api.getAbsPath(flask.request.values.get('path')),
-                                            filenames=core.plugins.FileManager.file_manage.get_file_list(core.api.getAbsPath(flask.request.values.get('path')))
+                                            filenames=core.plugins.FileManager.file_manage.get_file_list(core.api.getAbsPath(flask.request.values.get('path'))),
+                                            modules_list=get_plugins_names()
                                         )
                                     ))
         else:

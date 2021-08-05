@@ -46,5 +46,29 @@ def getAbsPath(path:str):
 
     return temp[0:-1]
 
+def get_filename(path:str):
+    if path == None:
+        return ''
+    if path != '' and path[0] == '"':
+        path = path[1:-1]
+    stk = Stack()
+    temp = ''
+    for i in path:
+        if i == '/' or i == '\\':
+            if temp == '':
+                continue
+            elif temp == '..':
+                stk.pop()
+            elif temp == '.':
+                temp == ''
+            else:
+                stk.push(temp)
+            temp = ''
+            continue
+        else:
+            temp += i
+    
+    return temp
+
 import hashlib,base64
 

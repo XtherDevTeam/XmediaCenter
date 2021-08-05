@@ -16,6 +16,64 @@ function do_import(){
 function do_open(){
 
 }
+
+function do_remove_song(name){
+    if(name == null){
+        alert('bad request');
+        return;
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=music_api&request=remove_song&pid={{pid}}&path=' + name,0);
+    xmlhttp.send();
+    var result = JSON.parse(xmlhttp.responseText);
+    if(result['status'] == 'error'){
+        alert('Failed with ' + result['reason']);
+    }
+}
+
+/* player start */
+current_playlist_url = [];
+current_playlist = [];
+current_index = 0;
+mode = 'm_normal'
+state = 0
+/* player end */
+function on_set_player_start(){
+    player = document.getElementById('player')
+    clbl = document.getElementById('current_lbl')
+    clbl.innerHTML = 'Current: '+ current_playlist[current_index];
+    player.src = current_playlist_url[current_index++];
+    state = !state
+    player.play()
+}
+
+function on_change_state(){
+    if(state) document.getElementById('player').pause()
+    if(!state) document.getElementById('player').play()
+    state = !state
+}
+
+function on_next_song(){
+    document.getElementById('current_lbl').innerHTML = 'Current: '+ current_playlist[current_index];
+    document.getElementById('player').src = current_playlist_url[current_index++];
+    document.getElementById('player').play()
+}
+
+function on_prev_song() {
+    current_index -= 2;
+    on_next_song()
+}
+
+function player_start_with_playlist(mode = 'm_normal'){
+    mode = mode;
+    {% for i in info['playlist'] %}
+    current_playlist.push('{{i['title']}}');
+    current_playlist_url.push('/api?action=fm_api&request=download&path={{i['path']}}');
+    {% endfor %}
+    on_set_player_start()
+}
+
+
 </script>
 
 <div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
@@ -31,13 +89,22 @@ function do_open(){
         </div>
         <div class="panel-body" style="width: 90%;margin: 0 auto;">
             <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_import()" role="button">Import song</a>
-            <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_open()" role="button">Open with music player</a>
+            <a class="btn btn-primary" href="#" onclick="player_start_with_playlist('m_loop')" role="button">Start playing</a><br><br>
+            <div class="music_player">
+                <h5 id="current_lbl">Current: </h5>
+                <audio id="player" src="" style="width: 100%;"></audio>
+                <a class="btn btn-primary" href="#" onclick="on_change_state()" role="button">Play/Pause</a>
+                <a class="btn btn-primary" href="#" onclick="on_next_song()" role="button">Next</a>
+                <a class="btn btn-primary" href="#" onclick="on_prev_song()" role="button">Prev</a>
+            </div>
             <br><br>
             <table class="table" style="margin: 0 auto;">
                 <thead>
                     <tr>
                         <th>Title</th>
                         <th>Album</th>
+                        <th>Performer</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,6 +112,10 @@ function do_open(){
                     <tr>
                         <td><a href="/music/player/{{i['name']}}">{{i['title']}}</a></td>
                         <td>{{i['album']}}</td>
+                        <td>{{i['performer']}}</td>
+                        <td>
+                            <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_remove_song('{{i['path']}}')" role="button">Remove song</a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

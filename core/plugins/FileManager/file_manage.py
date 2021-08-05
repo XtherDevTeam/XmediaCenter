@@ -1,4 +1,4 @@
-import os,sys,json,core.api,flask,shutil
+import os,sys,json,core.api,flask,shutil,magic
 from posixpath import expanduser
 
 def is_directory(path:str):
@@ -10,7 +10,12 @@ def response_with_file(path):
     if path != None and path[0] == '"':
         path = path[1:-1]
     try:
-        return flask.send_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),as_attachment=True)
+        is_preview = True
+        if magic.from_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),mime=True) == 'application/octet-stream':
+            is_preview = False
+        else:
+            is_preview = True
+        return flask.send_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),as_attachment=not is_preview,attachment_filename=core.api.get_filename(path),mimetype=magic.from_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),mime=True))
     except Exception as e:
         return json.dumps({ 'status':'error','reason':'Failed:' + str(e) })
 
@@ -33,7 +38,7 @@ def get_file_list(path):
         if is_directory(core.api.getAbsPath(path+'/'+i)):
             final.append( { 'filename':i,'type':'dir' } )
         else:
-            final.append( { 'filename':i,'type':'file' } )
+            final.append( { 'filename':i,'type':'file','mime':magic.from_file('core/storage/' + core.api.getAbsPath(path+'/'+i),mime=True) } )
     return final
 
 def remove(path):
