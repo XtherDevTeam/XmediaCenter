@@ -62,6 +62,35 @@ function do_import_all() {
     {% endif %}
     {% endfor %}
 }
+
+function do_covert(path){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=video_covert_api&path=' + path);
+    xmlhttp.send()
+    alert('Process Started. Please wait here for few minutes.')
+    xmlhttp.onreadystatechange = function () {
+        if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            alert('Success.')
+        }
+    }
+}
+
+function do_download() {
+    var url = prompt('Input Bilibili Video Url:');
+    if(url == null){
+        alert('Canceled.')
+        return;
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=vd_api&path={{path|safe}}&url="' + url + '"');
+    xmlhttp.send();
+    alert('Process Started.Please wait here for few minutes.');
+    xmlhttp.onreadystatechange = function () {
+        if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+            alert('Success.')
+        }
+    }
+}
 </script>
 
 <div class="rounded" style="position: relative;width: 90%;margin: 0 auto;background-color: white;opacity: 0.9;">
@@ -89,6 +118,9 @@ function do_import_all() {
             {% if modules_list.count('MusicPlayer') != 0 %}
             <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_import_all();" role="button">Import all music to playlist</a>
             {% endif %}
+            {% if modules_list.count('BilibiliVideoDownloader') != 0 and i['mime'][0:5] == 'video' %}
+            <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_download();" role="button">Download videos from bilibili</a>
+            {% endif %}
         </div>
         <table class="table" style="width: 90%;margin: 0 auto;">
             <thead>
@@ -102,14 +134,22 @@ function do_import_all() {
                 <tr>
                     <td>{{i['filename']}}</td>
                     <td>
-                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_remove('{{i['filename']}}')">Remove</a>
-                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_rename('{{i['filename']}}')">Rename</a>
+                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_remove('{{i['filename']|safe}}')">Remove</a>
+                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_rename('{{i['filename']|safe}}')">Rename</a>
                         {% if i['type'] == 'file'%}
-                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_download('{{i['filename']}}')">Download</a>
+                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_download('{{i['filename']|safe}}')">Download</a>
                         {% if modules_list.count('MusicPlayer') != 0 %}
 
                         {% if i['mime'][0:5] == 'audio' %}
-                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_import('{{path}}/{{i['filename']}}')">Import to playlist</a>
+                        <a href="#" class="btn btn-primary" role="button" onclick="do_import('{{path}}/{{i['filename']|safe}}')">Import to playlist</a>
+                        {% endif %}
+
+                        {% endif %}
+
+                        {% if modules_list.count('Video Player') != 0 and i['mime'][0:5] == 'video' %}
+                        <a href="/video?path={{path|safe}}/{{i['filename']|safe}}" class="btn btn-primary" role="button">Open with video player</a>
+                        {% if modules_list.count('BilibiliVideosCoverter') != 0 and i['mime'][0:5] == 'video' %}
+                        <a href="#" onclick="do_covert('{{path|safe}}/{{i['filename']|safe}}')" class="btn btn-primary" role="button">Covert</a>
                         {% endif %}
 
                         {% endif %}

@@ -1,0 +1,30 @@
+<script src="https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+
+<div class="rounded" style="width: 90%;opacity: 0.9;background-color: white;margin: 0 auto;">
+    <center>Player here</center>
+    <div id="dplayer"></div>
+</div>
+
+<script>
+var dp = new DPlayer({
+    element: document.getElementById('dplayer'),                       // 可选，player元素
+    autoplay: false,                                                   // 可选，自动播放视频，不支持移动浏览器
+    theme: '#FADFA3',                                                  // 可选，主题颜色，默认: #b7daff
+    loop: true,                                                        // 可选，循环播放音乐，默认：true
+    lang: 'zh',                                                        // 可选，语言，`zh'用于中文，`en'用于英语，默认：Navigator 
+    screenshot: true,                                                  // 可选，启用截图功能，默认值：false，注意：如果设置为
+    preload: 'auto',                                                   // 可选，预加载的方式可以是'none''metadata''auto'，默认
+    video: {                                                           // 必需，视频信息
+        url: '/api?action=fm_api&request=download&path={{path|safe}}',                                         // 必填，视频网址
+    },
+    danmaku: {                                                         // 可选，显示弹幕，忽略此选项以隐藏弹幕
+        id: '1145141919810',                                        // 必需，弹幕 id，注意：它必须是唯一的，不能在你的新播放器
+        api: '/api?action=vp_api&request=damuku&request_video={{path|safe}}',       // 必需，弹幕 api
+        addition: ['/api?action=vp_api&request=damuku&request_video={{path|safe}}']   // 可选的，额外的弹幕，参见：`Bilibili弹幕支持`
+    }
+});
+</script>

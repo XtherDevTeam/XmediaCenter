@@ -1,5 +1,10 @@
 # XmediaCenter README
 
+# The opensource projects in this repository
+
+- DanmuPlayer (//github.com/chiruom/danmuplayer/) - Licensed under the MIT license
+
+
 ### What's XmediaCenter？
 XmediaCenter is a project to replace netease cloud music , bilibili and more applications.
 

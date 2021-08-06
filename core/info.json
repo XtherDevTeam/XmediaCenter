@@ -1,1 +1,1 @@
-{"storage_pool_name": "Xiaokang00010's \u5feb\u4e50\u5c0f\u7ad9", "users": [{"username": "admin", "pwd_encoded": "5d4bbd5cf16ecde88589a74f60b78e7e"}], "modules": ["main","FileManager","Login","MusicPlayer"]}
+{"storage_pool_name": "Xiaokang00010's \u5feb\u4e50\u5c0f\u7ad9", "users": [{"username": "admin", "pwd_encoded": "5d4bbd5cf16ecde88589a74f60b78e7e"}], "modules": ["main","FileManager","MusicPlayer","video_player","BilibiliVideosCoverter","Login"]}
