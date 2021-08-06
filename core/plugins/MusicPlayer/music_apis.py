@@ -1,42 +1,54 @@
 import json,os,sys,pymediainfo,core.api
 
-def init_playlists():
-    if os.access('core/storage/playlists.json',os.F_OK):
+def init_playlists(userinfo:str):
+    # init config directory
+    if os.access('core/storage/.musicplayer',os.F_OK):
         None
     else:
-        with open('core/storage/playlists.json','w+',encoding='utf-8') as file:
+        os.mkdir('core/storage/.musicplayer')
+
+    # init user playlists
+    if os.access('core/storage/.musicplayer/playlists-' + userinfo + '.json',os.F_OK):
+        None
+    else:
+        with open('core/storage/.musicplayer/playlists-' + userinfo + '.json','w+',encoding='utf-8') as file:
             file.write(json.dumps([]))
 
-def get_playlists():
-    init_playlists()
+def get_playlists(userinfo:str):
+    if userinfo == None or userinfo == '':
+        return {'status':'error','reason':'Invalid Session'}
+    
+    init_playlists(userinfo)
     try:
-        with open('core/storage/playlists.json','r+',encoding='utf-8') as file:
+        with open('core/storage/.musicplayer/playlists-' + userinfo + '.json','r+',encoding='utf-8') as file:
             return {'status':'success','playlists':json.loads(file.read())}
     except Exception as e:
         return {'status':'error','reason':str(e)}
 
-def sync_playlists(pls:dict):
+def sync_playlists(pls:dict,userinfo:str):
     try:
-        with open('core/storage/playlists.json','w+',encoding='utf-8') as file:
+        if userinfo == None or userinfo == '':
+            None
+        with open('core/storage/.musicplayer/playlists-' + userinfo + '.json','w+',encoding='utf-8') as file:
             file.write(json.dumps(pls['playlists']))
             return {'status':'success'}
     except Exception as e:
         return {'status':'error','reason':str(e)}
 
-def create_playlist(name:str):
-    pls = get_playlists()
+def create_playlist(name:str,userinfo:str):
+    pls = get_playlists(userinfo)
     if pls['status'] == 'error':
         return pls
     else:
         pls['playlists'].append({ 'name':name,'songs':[] })
-        return sync_playlists(pls)
+        return sync_playlists(pls,userinfo)
 
-def append_songs(pid:int,path:str):
+def append_songs(pid:int,path:str,userinfo:str):
     try:
         print('path:',path)
         if path != None and path[0] == '"':
             path = path[1:-1]
-        pls = get_playlists()
+        pls = get_playlists(userinfo)
         if pls['status'] == 'error':
             return pls
         elif len(pls['playlists']) <= pid:
@@ -44,13 +56,13 @@ def append_songs(pid:int,path:str):
         elif pls['playlists'][pid]['songs'].count(path):
             return {'status':'success'}
         pls['playlists'][pid]['songs'].append(path)
-        return sync_playlists(pls)
+        return sync_playlists(pls,userinfo)
     except Exception as e:
         return {'status':'error','reason':str(e)}
 
-def remove_song(pid:int,path:str):
+def remove_song(pid:int,path:str,userinfo:str):
     try:
-        pls = get_playlists()
+        pls = get_playlists(userinfo)
         if pls['status'] == 'error':
             return pls
         if pls['playlists'][pid]['songs'].count(path) == 0:
@@ -60,9 +72,9 @@ def remove_song(pid:int,path:str):
     except Exception as e:
         return {'status':'error','reason':str(e)}
 
-def remove_playlist(pid:int):
+def remove_playlist(pid:int,userinfo:str):
     try:
-        pls = get_playlists()
+        pls = get_playlists(userinfo)
         if pls['status'] == 'error':
             return pls
         del pls['playlists'][pid]
@@ -70,11 +82,11 @@ def remove_playlist(pid:int):
     except Exception as e:
         return {'status':'error','reason':str(e)}
 
-def get_playlist_id(name:str):
+def get_playlist_id(name:str,userinfo:str):
     if name == None:
         return {'status':'error','reason':'Invalid playlist name'}
     else:
-        pls = get_playlists()
+        pls = get_playlists(userinfo)
         if pls['status'] == 'error':
             return pls
         else:
@@ -83,8 +95,8 @@ def get_playlist_id(name:str):
                     return {'status':'success','id':pls['playlists'].index(i)}
     return {'status':'error','reason':'No result'}
 
-def get_songs_info(pid:int):
-    pls = get_playlists()
+def get_songs_info(pid:int,userinfo:str):
+    pls = get_playlists(userinfo)
     print(pls['playlists'],len(pls['playlists']))
     if pls['status'] == 'error':
         return pls

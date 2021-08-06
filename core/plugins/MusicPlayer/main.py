@@ -37,36 +37,36 @@ def api_request(request:flask.request):
             return json.dumps({'status':'error','reason':'unknown request'})
         if pname[0] == '"':
             pname = pname[1:-1]
-        return json.dumps(core.plugins.MusicPlayer.music_apis.get_playlist_id(pname))
+        return json.dumps(core.plugins.MusicPlayer.music_apis.get_playlist_id(pname,flask.session.get('userinfo')))
     elif request_item == 'get_playlists':
-        return json.dumps(core.plugins.MusicPlayer.music_apis.get_playlists())
+        return json.dumps(core.plugins.MusicPlayer.music_apis.get_playlists(flask.session.get('userinfo')))
     elif request_item == 'create_playlist':
         pname = request.values.get('name')
         if pname == None:
             return json.dumps({'status':'error','reason':'unknown request'})
         if pname[0] == '"':
             pname = pname[1:-1]
-        return json.dumps(core.plugins.MusicPlayer.music_apis.create_playlist(pname))
+        return json.dumps(core.plugins.MusicPlayer.music_apis.create_playlist(pname,flask.session.get('userinfo')))
     elif request_item == 'add_song':
         pid = request.values.get('pid')
         path = request.values.get('path') # already is abs path
         if pid == None or path == None:
             return json.dumps({'status':'error','reason':'unknown request'})
         pid = int(pid)
-        return json.dumps(core.plugins.MusicPlayer.music_apis.append_songs(pid,path))
+        return json.dumps(core.plugins.MusicPlayer.music_apis.append_songs(pid,path,flask.session.get('userinfo')))
     elif request_item == 'remove_song':
         pid = request.values.get('pid')
         path = request.values.get('path') # already is abs path
         if pid == None or path == None:
             return json.dumps({'status':'error','reason':'unknown request'})
         pid = int(pid)
-        return json.dumps(core.plugins.MusicPlayer.music_apis.remove_song(pid,path))
+        return json.dumps(core.plugins.MusicPlayer.music_apis.remove_song(pid,path,flask.session.get('userinfo')))
     elif request_item == 'remove_playlist':
         pid = request.values.get('pid')
         if pid == None:
             return json.dumps({'status':'error','reason':'unknown request'})
         pid = int(pid)
-        return json.dumps(core.plugins.MusicPlayer.music_apis.remove_playlist(pid))
+        return json.dumps(core.plugins.MusicPlayer.music_apis.remove_playlist(pid,flask.session.get('userinfo')))
     
 
 def idx_of_music():
@@ -81,7 +81,7 @@ def idx_of_music():
                                     'plugins_templates/MusicPlayer/main.html',
                                     is_logined = is_logined,
                                     user = user,
-                                    playlists = core.plugins.MusicPlayer.music_apis.get_playlists()
+                                    playlists = core.plugins.MusicPlayer.music_apis.get_playlists(flask.session.get('userinfo'))
                                 )
                             ))
 
@@ -97,9 +97,9 @@ def idx_of_playlists(name:str):
                                     'plugins_templates/MusicPlayer/playlists.html',
                                     is_logined = is_logined,
                                     user = user,
-                                    playlists = core.plugins.MusicPlayer.music_apis.get_playlists(),
-                                    pid = core.plugins.MusicPlayer.music_apis.get_playlist_id(name)['id'],
-                                    info = core.plugins.MusicPlayer.music_apis.get_songs_info(core.plugins.MusicPlayer.music_apis.get_playlist_id(name)['id']),
+                                    playlists = core.plugins.MusicPlayer.music_apis.get_playlists(flask.session.get('userinfo')),
+                                    pid = core.plugins.MusicPlayer.music_apis.get_playlist_id(name,flask.session.get('userinfo'))['id'],
+                                    info = core.plugins.MusicPlayer.music_apis.get_songs_info(core.plugins.MusicPlayer.music_apis.get_playlist_id(name,flask.session.get('userinfo'))['id'],flask.session.get('userinfo')),
                                     name = name
                                 )
                             ))

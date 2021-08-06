@@ -1,10 +1,12 @@
-<div style="margin: 0 auto;">
+<div class="rounded" style="margin: 0 auto;width: 90%;background-color: white;opacity: 0.9;">
     <center>
+    <br>
     {% if is_logined == false %}
-    <h1 style="color: white;">Please login before.</h3>
+    <h1>Please login before.</h3>
     {% else %}
-    <h1 style="color: white;">Welcome,{{username['u']}}</h3>
-    <h3 style="color: white;">Select an application in menubar and get started.</h3>
-    </center>
+    <h1>Welcome,{{username['u']}}</h3>
+    <h3>Select an application in menubar and get started.</h3>
     {% endif %}
+    <br>
+    </center>
 </div>
