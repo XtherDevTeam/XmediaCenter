@@ -40,7 +40,9 @@ def api_request(request:flask.request):
             print('\b')
         print('\b')
     fp.close()
-    os.remove(os.getcwd() + '/core/storage/' + core.api.getAbsPath(request_video_path)) # remove old file
+    request_video_path = request_video_path[1:-1]
+    coverted_video_path = coverted_video_path[1:-1]
+    os.remove(request_video_path) # remove old file
     os.rename(coverted_video_path,request_video_path) # replace old file
 
     return json.dumps({'status':'success'})

@@ -1,7 +1,7 @@
 from os import F_OK
 import os
 from types import CodeType
-import flask,core.plugins.FileManager.file_manage,core.api,core.xmcp
+import flask,core.plugins.FileManager.file_manage,core.api,core.xmcp,core.plugins.video_player.video_apis
 from flask.globals import g
 from flask.templating import render_template
 import json
@@ -30,10 +30,18 @@ def get_plugins_path_list():
 def api_request(request:flask.request):
     request_item = request.values.get('request')
     if request_item == 'damuku':
-        video_path = str(request.values.get('path'))
+        video_path = request.values.get('request_video')
         # fetch from bilibili
-        if video_path.endswith('.flv'): 
-            print('trying access:',('core/storage/' + core.api.getAbsPath(video_path))[0:-4] + '.cmt.xml')
+        if video_path.endswith('v3/?id=undefined'):
+            video_path = video_path[0:0-len('v3/?id=undefined')]
+        ret = {'code':0,'data':[]}
+        print('trying access:',('core/storage/' + core.api.getAbsPath(video_path))[0:-4] + '.cmt.xml')
+        with open(file='core/storage/' + core.api.getAbsPath(video_path)[0:-4] + '.cmt.xml',mode='r') as f:
+            ret['data'] = core.plugins.video_player.video_apis.damuku_parser(f.read().encode(encoding='utf-8'))
+        
+        response = flask.make_response(json.dumps(ret))
+        response.headers['Content-Type']= 'application/json'
+        return response
     None
                 
 

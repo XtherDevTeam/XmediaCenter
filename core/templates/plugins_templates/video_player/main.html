@@ -3,10 +3,11 @@
 <script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+<link href="https://cdn.bootcdn.net/ajax/libs/dplayer/1.24.0/DPlayer.min.css" rel="stylesheet">
 
 <div class="rounded" style="width: 90%;opacity: 0.9;background-color: white;margin: 0 auto;">
     <center>Player here</center>
-    <div id="dplayer"></div>
+    <div id="dplayer" style="opacity: 1;"></div>
 </div>
 
 <script>
@@ -22,9 +23,7 @@ var dp = new DPlayer({
         url: '/api?action=fm_api&request=download&path={{path|safe}}',                                         // 必填，视频网址
     },
     danmaku: {                                                         // 可选，显示弹幕，忽略此选项以隐藏弹幕
-        id: '1145141919810',                                        // 必需，弹幕 id，注意：它必须是唯一的，不能在你的新播放器
-        api: '/api?action=vp_api&request=damuku&request_video={{path|safe}}',       // 必需，弹幕 api
-        addition: ['/api?action=vp_api&request=damuku&request_video={{path|safe}}']   // 可选的，额外的弹幕，参见：`Bilibili弹幕支持`
+        api: '/api?action=vp_api&request=damuku&request_video={{path|safe}}'
     }
 });
 </script>
