@@ -2,7 +2,7 @@
 
 # The opensource projects in this repository
 
-- DanmuPlayer (//github.com/chiruom/danmuplayer/) - Licensed under the MIT license
+- dplayer (//github.com/DIYgod/DPlayer/) - Licensed under the MIT license
 
 
 ### What's XmediaCenter？
