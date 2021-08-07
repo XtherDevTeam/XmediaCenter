@@ -4,7 +4,7 @@ from flask.globals import g
 from flask.templating import render_template
 import json
 
-name = 'BilibiliVideosCoverter'
+name = 'BilibiliVideosDownloader'
 
 requestCPR = None
 
@@ -25,11 +25,12 @@ def get_plugins_path_list():
     return ret
 
 def api_request(request:flask.request):
-    request_video_path = request.values.get('path')
-    coverted_video_path = request_video_path[0:-4] + '.encoded.mp4'
-    request_video_path = '"'+ os.getcwd() + '/core/storage/' + core.api.getAbsPath(request_video_path) + '"'
-    coverted_video_path = '"' + os.getcwd() + '/core/storage/' + core.api.getAbsPath(coverted_video_path) + '"'
-    fp = os.popen('ffmpeg -i ' + request_video_path + ' ' + coverted_video_path,'r')
+    request_path = request.values.get('path')
+    url = request.values.get('url')
+    if url != None and url[0] == '"':
+        url = url[1:-1]
+    
+    fp = os.popen('~/.local/bin/you-get -l ' + url + ' -o "' + os.getcwd() + '/core/storage/' + request_path + '"' ,'r')
     str = ''
     while True:
         str = fp.readline()
@@ -40,12 +41,9 @@ def api_request(request:flask.request):
             print('\b')
         print('\b')
     fp.close()
-    os.remove(os.getcwd() + '/core/storage/' + core.api.getAbsPath(request_video_path)) # remove old file
-    os.rename(coverted_video_path,request_video_path) # replace old file
-
     return json.dumps({'status':'success'})
 
 def register(server:flask.Flask):
     return {
-        'registered_api': ['video_covert_api']
+        'registered_api': ['vd_api']
     }

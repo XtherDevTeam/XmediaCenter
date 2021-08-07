@@ -118,8 +118,8 @@ function do_download() {
             {% if modules_list.count('MusicPlayer') != 0 %}
             <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_import_all();" role="button">Import all music to playlist</a>
             {% endif %}
-            {% if modules_list.count('BilibiliVideoDownloader') != 0 and i['mime'][0:5] == 'video' %}
-            <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_download();" role="button">Download videos from bilibili</a>
+            {% if modules_list.count('BilibiliVideosDownloader') != 0 %}
+            <a class="btn btn-primary" href="#" onclick="do_download();" role="button">Download videos from bilibili</a>
             {% endif %}
         </div>
         <table class="table" style="width: 90%;margin: 0 auto;">
