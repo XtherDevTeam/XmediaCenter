@@ -35,10 +35,11 @@ def api_request(request:flask.request):
         str = fp.readline()
         if str == '':
             break
+        str = str.replace('\n','')
         print(str)
         for i in str:
-            print('\b')
-        print('\b')
+            print('\b',end='')
+        print('\b',end='')
     fp.close()
     request_video_path = request_video_path[1:-1]
     coverted_video_path = coverted_video_path[1:-1]

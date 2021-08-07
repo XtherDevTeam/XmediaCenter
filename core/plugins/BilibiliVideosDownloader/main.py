@@ -36,10 +36,11 @@ def api_request(request:flask.request):
         str = fp.readline()
         if str == '':
             break
+        str = str.replace('\n','')
         print(str)
         for i in str:
-            print('\b')
-        print('\b')
+            print('\b',end='')
+        print('\b',end='')
     fp.close()
     return json.dumps({'status':'success'})
 
