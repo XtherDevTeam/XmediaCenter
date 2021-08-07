@@ -39,7 +39,7 @@ function do_create_dir(filename){
     }
     //document.execCommand('Refresh')
 }
-function do_download(filename){
+function do_download_renamed(filename){
     window.open('/api?action=fm_api&request=download&path="{{path}}/'+filename+'"')
     //document.execCommand('Refresh')
 }
@@ -137,7 +137,7 @@ function do_download() {
                         <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_remove('{{i['filename']|safe}}')">Remove</a>
                         <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_rename('{{i['filename']|safe}}')">Rename</a>
                         {% if i['type'] == 'file'%}
-                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_download('{{i['filename']|safe}}')">Download</a>
+                        <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_download_renamed('{{i['filename']|safe}}')">Download</a>
                         {% if modules_list.count('MusicPlayer') != 0 %}
 
                         {% if i['mime'][0:5] == 'audio' %}

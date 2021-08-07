@@ -29,8 +29,11 @@ def api_request(request:flask.request):
     url = request.values.get('url')
     if url != None and url[0] == '"':
         url = url[1:-1]
-    
-    fp = os.popen('~/.local/bin/you-get -l ' + url + ' -o "' + os.getcwd() + '/core/storage/' + request_path + '"' ,'r')
+    cookies = ' '
+    if os.access(os.getcwd()+'/core/plugins/BilibiliVideosDownloader/cookies.sqlite',os.F_OK):
+        cookies = ' --cookies "' + os.getcwd()+'/core/plugins/BilibiliVideosDownloader/cookies.sqlite' + '" '
+    print("cmd:",'~/.local/bin/you-get -l ' + url + ' -o "' + os.getcwd() + '/core/storage/' + request_path + '"' + cookies)
+    fp = os.popen('~/.local/bin/you-get -l ' + url + ' -o "' + os.getcwd() + '/core/storage/' + request_path + '"' + cookies,'r')
     str = ''
     while True:
         str = fp.readline()
