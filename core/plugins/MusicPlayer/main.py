@@ -51,6 +51,7 @@ def api_request(request:flask.request):
         if pid == None or path == None:
             return json.dumps({'status':'error','reason':'unknown request'})
         pid = int(pid)
+        path = core.api.getAbsPath(path)
         return json.dumps(core.plugins.MusicPlayer.music_apis.append_songs(pid,path,flask.session.get('userinfo')))
     elif request_item == 'remove_song':
         pid = request.values.get('pid')

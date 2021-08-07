@@ -66,9 +66,10 @@ def remove_song(pid:int,path:str,userinfo:str):
         if pls['status'] == 'error':
             return pls
         if pls['playlists'][pid]['songs'].count(path) == 0:
-            return {'status':'error','reason':'song is not in list'}
+            print(pls['playlists'][pid]['songs'])
+            return {'status':'error','reason':'song is not in list:' + path}
         del pls['playlists'][pid]['songs'][pls['playlists'][pid]['songs'].index(path)]
-        return sync_playlists(pls)
+        return sync_playlists(pls,userinfo)
     except Exception as e:
         return {'status':'error','reason':str(e)}
 
@@ -78,7 +79,7 @@ def remove_playlist(pid:int,userinfo:str):
         if pls['status'] == 'error':
             return pls
         del pls['playlists'][pid]
-        return sync_playlists(pls)
+        return sync_playlists(pls,userinfo)
     except Exception as e:
         return {'status':'error','reason':str(e)}
 
