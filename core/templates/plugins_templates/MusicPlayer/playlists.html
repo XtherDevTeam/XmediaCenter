@@ -44,11 +44,16 @@ function on_set_player_start(){
     clbl = document.getElementById('current_lbl')
     clbl.innerHTML = 'Current: ' + current_playlist[current_index][0] + ' - ' + current_playlist[current_index][1] + ' - ' + current_playlist[current_index][2];
     player.src = current_playlist_url[current_index++];
+    player.load()
+    document.getElementById('song-progress-bar').min = 0;
+    document.getElementById('song-progress-bar').max = document.getElementById('player').duration;
 }
 
 function on_change_state(){
     if(state) document.getElementById('player').pause()
     if(!state) document.getElementById('player').play()
+    document.getElementById('song-progress-bar').min = 0;
+    document.getElementById('song-progress-bar').max = document.getElementById('player').duration;
     state = !state
 }
 
@@ -68,6 +73,9 @@ function on_next_song(){
     }
     document.getElementById('current_lbl').innerHTML = 'Current: '+ current_playlist[current_index][0] + ' - ' + current_playlist[current_index][1] + ' - ' + current_playlist[current_index][2];
     document.getElementById('player').src = current_playlist_url[current_index++];
+    document.getElementById('song-progress-bar').min = 0;
+    document.getElementById('song-progress-bar').max = document.getElementById('player').duration;
+    document.getElementById('song-progress-bar').value = 0;
     document.getElementById('player').play()
 }
 
@@ -90,6 +98,23 @@ function player_start_with_playlist(mode = 'm_normal'){
     }
 }
 
+function progress_bar_init() {
+    document.getElementById('song-progress-bar').onchange = function () {
+        console.log('this.value-> ',document.getElementById('song-progress-bar').value )
+        
+    }
+    setInterval(function () {
+        document.getElementById('song-progress-bar').max = document.getElementById('player').duration;
+        document.getElementById('song-progress-bar').value = document.getElementById('player').currentTime;
+        var now_minutes = Math.trunc(Math.trunc(document.getElementById('player').currentTime) / 60);
+        var now_seconds = Math.trunc(Math.trunc(document.getElementById('player').currentTime) % 60);
+        var tot_minutes = Math.trunc(Math.trunc(document.getElementById('song-progress-bar').max) / 60);
+        var tot_seconds = Math.trunc(Math.trunc(document.getElementById('song-progress-bar').max) % 60);
+        document.getElementById('progress_show').innerHTML = now_minutes + ':' + now_seconds + ' of ' + tot_minutes + ':' + tot_seconds;
+        document.getElementById('player').volume = document.getElementById('song-volume-changer').value / 100;
+    },10)
+}
+
 /* player end */
 
 </script>
@@ -109,10 +134,14 @@ function player_start_with_playlist(mode = 'm_normal'){
             <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_import()" role="button">Import song</a><br>
             <div class="music_player">
                 <h5 id="current_lbl">Current: </h5>
-                <audio id="player" class="player" src="" style="width: 100%;"></audio>
+                <audio id="player" class="player" src=""></audio>
+                <h6 id="progress_show">0:00 of 0:00</h5>
+                <input id="song-progress-bar" type="range" class="form-range" value="0"></input>
+                
                 <a class="btn btn-primary" href="#" onclick="on_change_state()" role="button">Play/Pause</a>
-                <a class="btn btn-primary" href="#" onclick="on_next_song()" role="button">Next</a>
-                <a class="btn btn-primary" href="#" onclick="on_prev_song()" role="button">Prev</a>
+                <a class="btn btn-primary" href="#" onclick="on_next_song()"    role="button">Next</a>
+                <a class="btn btn-primary" href="#" onclick="on_prev_song()"    role="button">Prev</a>
+                <input id="song-volume-changer" type="range" min="0" max="100" value="100"></input>
             </div>
             <br><br>
             <table class="table" style="margin: 0 auto;">
@@ -142,6 +171,7 @@ function player_start_with_playlist(mode = 'm_normal'){
             document.getElementById('player').load()
             player_start_with_playlist()
             on_set_player_start()
+            progress_bar_init()
         </script>
         {% endif %}
         <br><br>
