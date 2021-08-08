@@ -87,7 +87,7 @@ def idx_of_api():
         #flask.session["time"] = time.time()
         # configure session lifetime
         flask.session.permanent = True
-        server_obj.permanent_session_lifetime = 10*60
+        server_obj.permanent_session_lifetime = 1*60*60
         return json.dumps({ 'status':'success', 'userinfo': flask.session['userinfo']})
     elif action == 'checker':
         if flask.session.get('userinfo') == None:
