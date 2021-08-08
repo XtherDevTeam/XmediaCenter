@@ -37,7 +37,7 @@ function do_import(path,pname = null){
     var pid = result['id'];
 
     xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('GET','/api?action=music_api&request=add_song&pid=' + String(pid) + '&path=' + path,0);
+    xmlhttp.open('GET','/api?action=music_api&request=add_song&pid=' + String(pid) + '&path="' + path + '"',0);
     xmlhttp.send();
     result = JSON.parse(xmlhttp.responseText);
     if(result['status'] == 'error'){

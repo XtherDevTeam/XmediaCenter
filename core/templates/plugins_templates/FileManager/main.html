@@ -58,7 +58,7 @@ function do_import_all() {
     var pname = prompt('Input playlist name:')
     {% for i in filenames %}
     {% if i['type'] == 'file' and i['mime'][0:5] == 'audio' %}
-    do_import('"{{path|safe}}/{{i["filename"]}}"',pname)
+    do_import("{{path}}/{{i['filename']|safe}}",pname)
     {% endif %}
     {% endfor %}
 }
@@ -141,7 +141,7 @@ function do_download() {
                         {% if modules_list.count('MusicPlayer') != 0 %}
 
                         {% if i['mime'][0:5] == 'audio' %}
-                        <a href="#" class="btn btn-primary" role="button" onclick="do_import('{{path}}/{{i['filename']|safe}}')">Import to playlist</a>
+                        <a href="#" class="btn btn-primary" role="button" onclick="do_import(&quot;{{path}}/{{i['filename']|safe}}&quot;)">Import to playlist</a>
                         {% endif %}
 
                         {% endif %}

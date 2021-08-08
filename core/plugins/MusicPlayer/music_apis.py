@@ -107,13 +107,16 @@ def get_songs_info(pid:int,userinfo:str):
     final = { 'status': 'success','playlist':[] }
     for i in pls['playlists'][pid]['songs']:
         result = pymediainfo.MediaInfo.parse('core/storage/' + core.api.getAbsPath(i))
-        final['playlist'].append(
-            {
-                'title':json.loads(result.to_json())['tracks'][0]['title'],
-                'track_name':json.loads(result.to_json())['tracks'][0]['track_name'],
-                'album':json.loads(result.to_json())['tracks'][0]['album'],
-                'performer':json.loads(result.to_json())['tracks'][0]['performer'],
-                'path': core.api.getAbsPath(i)
-            }
-        )
+        try:
+            final['playlist'].append(
+                {
+                    'title':json.loads(result.to_json())['tracks'][0]['title'],
+                    'track_name':json.loads(result.to_json())['tracks'][0].get('track_name'),
+                    'album':json.loads(result.to_json())['tracks'][0].get('album'),
+                    'performer':json.loads(result.to_json())['tracks'][0].get('performer'),
+                    'path': core.api.getAbsPath(i)
+                }
+            )
+        except Exception as e:
+            print('failed: ' + core.api.getAbsPath(i))
     return final

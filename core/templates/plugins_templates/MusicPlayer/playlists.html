@@ -81,9 +81,9 @@ function player_start_with_playlist(mode = 'm_normal'){
     current_playlist = []
     current_playlist_url = []
     {% for i in info['playlist'] %}
-    for_search.push('{{i["title"]|safe}}')
-    current_playlist.push(['{{i["title"]|safe}}','{{i["album"]|safe}}','{{i["performer"]|safe}}']);
-    current_playlist_url.push('/api?action=fm_api&request=download&path={{i["path"]}}');
+    for_search.push("{{i['title']|safe}}")
+    current_playlist.push(["{{i['title']|safe}}","{{i['album']|safe}}","{{i['performer']|safe}}"]);
+    current_playlist_url.push("/api?action=fm_api&request=download&path={{i['path']}}");
     {% endfor %}
     document.getElementById('player').onended = function(){
         on_next_song()
@@ -127,7 +127,7 @@ function player_start_with_playlist(mode = 'm_normal'){
                 <tbody>
                     {% for i in info['playlist'] %}
                     <tr>
-                        <td><a href="#" onclick="current_index=for_search.indexOf('{{i['title']}}');on_next_song();">{{i['title']}}</a></td>
+                        <td><a href="#" onclick="current_index=for_search.indexOf(&quot;{{i['title']}}&quot;);on_next_song();">{{i['title']}}</a></td>
                         <td>{{i['album']}}</td>
                         <td>{{i['performer']}}</td>
                         <td>
