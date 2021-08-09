@@ -39,6 +39,18 @@
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.2/js/locales/LANG.js"></script>
     <script src="/static/md5.js" crossorigin="anonymous"></script>
 </head>
+
+<script>
+  function loadCSS() {
+    if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|wOSBrowser|BrowserNG|WebOS)/i))) {
+      document.write('<link rel="stylesheet" type="text/css" href="/static/plugins_statics/main/mobile.css" media="screen">');
+    } else {
+      document.write('<link rel="stylesheet" type="text/css" href="/static/plugins_statics/main/normal.css" media="screen">');
+    }
+  }
+  loadCSS();
+</script>
+
 <body style="background-image: url(/static/background.jpg); background-size: cover; background-attachment:fixed;">
   <nav class="navbar navbar-expand-lg navbar-light bg-light" style="opacity: 0.9;">
     <div class="container-fluid">
@@ -66,7 +78,7 @@
       {{ renderText }}
       <br>
     </div>
-    <div class="rounded" style="width: 90%;opacity: 0.9;background-color: white;margin: 0 auto;">
+    <div class="rounded xmc-container">
       <center style="opacity: 0.9;">
         <br>
         <h6>Hey,guys.This site is run by XmediaCenter.Thanks for using!Enjoy it.</h6>
