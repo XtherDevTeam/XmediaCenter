@@ -101,7 +101,7 @@ function player_start_with_playlist(mode = 'm_normal'){
 function progress_bar_init() {
     document.getElementById('song-progress-bar').onchange = function () {
         console.log('this.value-> ',document.getElementById('song-progress-bar').value )
-        
+        document.getElementById('player').currentTime = document.getElementById('song-progress-bar').value;
     }
     setInterval(function () {
         document.getElementById('song-progress-bar').max = document.getElementById('player').duration;
