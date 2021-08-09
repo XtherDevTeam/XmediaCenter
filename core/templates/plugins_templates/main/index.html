@@ -43,9 +43,9 @@
 <script>
   function loadCSS() {
     if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|wOSBrowser|BrowserNG|WebOS)/i))) {
-      document.write('<link rel="stylesheet" type="text/css" href="/static/plugins_statics/main/mobile.css" media="screen">');
+      document.write('<link rel="stylesheet" type="text/css" href="/static/plugins_statics/main/mobile.css">');
     } else {
-      document.write('<link rel="stylesheet" type="text/css" href="/static/plugins_statics/main/normal.css" media="screen">');
+      document.write('<link rel="stylesheet" type="text/css" href="/static/plugins_statics/main/normal.css">');
     }
   }
   loadCSS();
@@ -78,7 +78,7 @@
       {{ renderText }}
       <br>
     </div>
-    <div class="rounded xmc-container">
+    <div class="xmc-container">
       <center style="opacity: 0.9;">
         <br>
         <h6>Hey,guys.This site is run by XmediaCenter.Thanks for using!Enjoy it.</h6>

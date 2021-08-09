@@ -19,22 +19,27 @@ function submit(){
 </script>
 
 
-<div class="rounded xmc-container">
+<div class="xmc-container">
     <br>
     <center><h1>
         Login
     </h1></center><br>
-    <form method="GET" class="login-form">
-        <div class="input-group">
-            <span class="input-group-text" id="sizing-addon1">Username</span>
-            <input id="username" name="username" type="text" class="form-control" placeholder="" aria-describedby="basic-addon1">
-        </div>
-        <br>
-        <div class="input-group">
-            <span class="input-group-text" id="sizing-addon2">Password</span>
-            <input id="password" name="password" type="password" class="form-control" placeholder="" aria-describedby="basic-addon1">
-        </div><br>
-        <center><a class="btn btn-primary" href="javascript:void(0);" onclick="submit();">Submit</a></center>
-        <br>
-    </form>
+    <div id="loginForm">
+        <form method="GET">
+            <div class="input-group">
+                <span class="input-group-text" id="sizing-addon1">Username</span>
+                <input id="username" name="username" type="text" class="form-control" placeholder="" aria-describedby="basic-addon1">
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-text" id="sizing-addon2">Password</span>
+                <input id="password" name="password" type="password" class="form-control" placeholder="" aria-describedby="basic-addon1">
+            </div><br>
+            <center><a class="btn btn-primary" href="javascript:void(0);" onclick="submit();">Submit</a></center>
+            <br>
+        </form>
+    </div>
+    <script>
+        
+    </script>
 </div>
