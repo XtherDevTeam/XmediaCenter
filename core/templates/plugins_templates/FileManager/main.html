@@ -106,16 +106,20 @@ function do_download() {
             </h3>
         </div>
         <div class="panel-body" style="width: 90%;margin: 0 auto;">
+            {% if is_logined == True %}
             <form action="/api?action=fm_api&request=upload&path={{path}}/" enctype="multipart/form-data" method="POST">
                 <span class="input-group-text" id="basic-addon1">upload files</span>
                 <input id="upload" name="file" type="file" class="file" data-show-preview="false">
             </form>
+            {% endif %}
             <a class="btn btn-primary" href="javascript:back_to_last();" onclick=";" role="button">Back to last</a>
+            {% if is_logined == True %}
             <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_create_dir();" role="button">Create Directory</a>
-            {% if modules_list.count('MusicPlayer') != 0 %}
+            {% endif %}
+            {% if modules_list.count('MusicPlayer') != 0 and is_logined == True %}
             <a class="btn btn-primary" href="javascript:location.reload()" onclick="do_import_all();" role="button">Import all music to playlist</a>
             {% endif %}
-            {% if modules_list.count('BilibiliVideosDownloader') != 0 %}
+            {% if modules_list.count('BilibiliVideosDownloader') != 0 and is_logined == True %}
             <a class="btn btn-primary" href="#" onclick="do_download();" role="button">Download videos from bilibili</a>
             {% endif %}
         </div>
