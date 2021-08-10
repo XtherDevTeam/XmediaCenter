@@ -26,6 +26,7 @@ function do_import(path,pname = null){
         return;
     }
     path = path.replace('&amp;','%26') // fuck you,url encode
+    path = path.replace('&','%26') // fuck you,url encode
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open('GET','/api?action=music_api&request=get_playlist_id&name=' + pname,0);
     xmlhttp.send()
