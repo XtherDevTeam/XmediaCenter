@@ -92,10 +92,11 @@
   </nav>
   <script>
     var navbar_isactive = "";
+    console.log('is mobile:' + isMobile())
     if(isMobile()){
-      navbar_isactive = "";
+      navbar_isactive = "none";
     }else{
-      navbar_isactive = "true";
+      navbar_isactive = "";
     }
     function refresh_navbar(){
       console.log('i got refreshed. ' + document.getElementById('navbar-main').style.display)
