@@ -1,4 +1,4 @@
-import json,os,sys,pymediainfo,core.api
+import json,os,sys,pymediainfo,core.api,hashlib
 
 def init_playlists(userinfo:str):
     # init config directory
@@ -20,7 +20,7 @@ def get_playlists(userinfo:str):
     
     init_playlists(userinfo)
     try:
-        with open('core/storage/.musicplayer/playlists-' + userinfo + '.json','r+',encoding='utf-8') as file:
+        with open('core/storage/.musicplayer/playlists-' + hashlib.md5(userinfo).hexdigest() + '.json','r+',encoding='utf-8') as file:
             return {'status':'success','playlists':json.loads(file.read())}
     except Exception as e:
         return {'status':'error','reason':str(e)}
@@ -29,7 +29,7 @@ def sync_playlists(pls:dict,userinfo:str):
     try:
         if userinfo == None or userinfo == '':
             None
-        with open('core/storage/.musicplayer/playlists-' + userinfo + '.json','w+',encoding='utf-8') as file:
+        with open('core/storage/.musicplayer/playlists-' + hashlib.md5(userinfo).hexdigest() + '.json','w+',encoding='utf-8') as file:
             file.write(json.dumps(pls['playlists']))
             return {'status':'success'}
     except Exception as e:
