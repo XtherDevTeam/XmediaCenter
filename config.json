@@ -1,6 +1,6 @@
 {
     "host": "0.0.0.0",
-    "port": 12345,
+    "port": 80,
     "storage_path": "storage",
     "default_page_path": "index.html",
     "templates_path": "templates",

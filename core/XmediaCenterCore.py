@@ -108,6 +108,10 @@ def idx_of_api():
 def wdnmd():
     return modules
 
+@server_obj.route('/.well-known/acme-challenge/cwDWxYbWN4BMIa79oSa1y2mWtgvGgYfGaqUFWQPcmo0')
+def route_for_cert():
+    return "cwDWxYbWN4BMIa79oSa1y2mWtgvGgYfGaqUFWQPcmo0.BxXQXu6A-T_IM4g8Tnr2YfVK_nmCu0iNWKSXdDWlPRA"
+
 def load_all_modules():
     for i in storage_info['modules']:
         modules.append(importlib.import_module('core.plugins.' + i + '.main'))
