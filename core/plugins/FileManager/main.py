@@ -36,19 +36,21 @@ def api_request(request:flask.request):
         return json.dumps(core.plugins.FileManager.file_manage.get_file_list(request.args.get('path')))
     elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'download':
         return core.plugins.FileManager.file_manage.response_with_file(request.args.get('path'))
-    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'is_dir':
+    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'is_dir' and flask.session.get('userinfo') != None:
         return core.plugins.FileManager.file_manage.is_directory(request.args.get('path'))
-    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'remove':
+    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'remove' and flask.session.get('userinfo') != None:
         return core.plugins.FileManager.file_manage.remove(request.args.get('path'))
-    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'create_dir':
+    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'create_dir' and flask.session.get('userinfo') != None:
         return core.plugins.FileManager.file_manage.create_dir(request.args.get('path'))
-    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'rename':
+    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'rename' and flask.session.get('userinfo') != None:
         return core.plugins.FileManager.file_manage.rename(request.args.get('path'),request.args.get('new'))
-    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'upload':
+    elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'upload' and flask.session.get('userinfo') != None:
         file = request.files.get("file")
         print('request of ' + file.filename)
         file.save('core/storage/' + request.args.get('path') + file.filename)
         return flask.redirect('/fm?path="' + request.args.get('path') + '"')
+    else:
+        return json.dumps({'status':'error','reason':'Invalid Session'})
     None
 
 def idx_of_fm():
