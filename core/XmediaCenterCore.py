@@ -53,6 +53,12 @@ def create_account(username:str,password:str):
     )
     syncConfig()
 
+def create_account_with_md5(username:str,password:str):
+    storage_info['users'].append(
+        { 'username': username , 'pwd_encoded':password }
+    )
+    syncConfig()
+
 def remove_account(username:str,password:str):
     password += '_XmediaCenter'
     del storage_info['users'][(storage_info['users'].index({ 'username': username , 'pwd_encoded':hashlib.md5(password.encode(encoding='utf-8')).hexdigest() }))]
@@ -89,6 +95,40 @@ def idx_of_api():
         flask.session.permanent = True
         server_obj.permanent_session_lifetime = 1*60*60
         return json.dumps({ 'status':'success', 'userinfo': flask.session['userinfo']})
+    elif action == 'signup':
+        uinf = flask.request.args.get('userinfo').__str__()
+        core.api.add_to_pool(uinf)
+        return json.dumps({'status':'success'})
+    elif action == 'accept_register_request':
+        idx = flask.request.args.get('idx')
+        if idx == None:
+            return json.dumps({'status':'error','reason':'Invalid Request'})
+        elif flask.session.get('userinfo') == None:
+            return json.dumps({'status':'error','reason':'Invalid Session'})
+        else:
+            dic = core.api.get_register_requests_pool()
+            idx = int(idx)
+            if idx + 1 > len(dic['file']['requests']):
+                return json.dumps({'status':'error','reason':'Invalid Request'})
+            userinfo = dic['file']['requests'][idx]
+            if userinfo == None:
+                return json.dumps({'status':'error','reason':'Invalid Request'})
+            user = core.xmcp.parseUserInfo(userinfo)
+            create_account_with_md5(user['u'],user['p'])
+            del dic['file']['requests'][idx]
+            return core.api.sync_register_requests_pool(dic['file'])
+    elif action == 'deny_register_request':
+        idx = flask.request.args.get('idx')
+        if idx == None:
+            return json.dumps({'status':'error','reason':'Invalid Request'})
+        elif flask.session.get('userinfo') == None:
+            return json.dumps({'status':'error','reason':'Invalid Session'})
+        dic = core.api.get_register_requests_pool()
+        idx = int(idx)
+        if idx + 1 > len(dic['file']['requests']):
+            return json.dumps({'status':'error','reason':'Invalid Request'})
+        del dic['file']['requests'][idx]
+        return core.api.sync_register_requests_pool(dic['file'])
     elif action == 'checker':
         if flask.session.get('userinfo') == None:
             return json.dumps({ 'status':'error','reason':'Invalid Session' })

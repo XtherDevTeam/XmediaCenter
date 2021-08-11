@@ -1,0 +1,50 @@
+<script>
+    function submit() {
+        var u = document.getElementById("username").value;
+        var p = document.getElementById("password").value + "_XmediaCenter";
+        p = hex_md5(p);
+        var final = u + ":" + p;
+        final = btoa(final)
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", '/api?action=signup&userinfo="' + final + '"', 0);
+        xmlhttp.send();
+        console.log(xmlhttp.responseText);
+        var response = JSON.parse(xmlhttp.responseText)
+        if (response["status"] == "error") {
+            alert('failed with ' + response['reason'] + '\nplease check your username and password then try again later.')
+        } else {
+            alert('Register success. Please wait for adminisator review.');
+            window.location = '/main'
+        }
+    }
+</script>
+
+
+<div class="xmc-container">
+    <br>
+    <center>
+        <h1>
+            Sign up
+        </h1>
+    </center><br>
+    <div id="loginForm">
+        <form method="GET">
+            <div class="input-group">
+                <span class="input-group-text" id="sizing-addon1">Username</span>
+                <input id="username" name="username" type="text" class="form-control" placeholder=""
+                    aria-describedby="basic-addon1">
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-text" id="sizing-addon2">Password</span>
+                <input id="password" name="password" type="password" class="form-control" placeholder=""
+                    aria-describedby="basic-addon1">
+            </div><br>
+            <center><a class="btn btn-primary" href="javascript:void(0);" onclick="submit();">Submit</a></center>
+            <br>
+        </form>
+    </div>
+    <script>
+
+    </script>
+</div>

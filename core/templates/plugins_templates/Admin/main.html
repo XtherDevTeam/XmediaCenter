@@ -1,0 +1,74 @@
+<script>
+function accept(idx){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=accept_register_request&idx='+idx,0);
+    xmlhttp.send();
+    console.log(xmlhttp.responseText)
+    var json = JSON.parse(xmlhttp.responseText)
+    if(json['status'] == 'error'){
+        alert('Failed with ' + json['reason']);
+    }else{
+        alert('Success')
+    }
+}
+function deny(idx){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=deny_register_request&idx='+idx,0);
+    xmlhttp.send();
+    console.log(xmlhttp.responseText)
+    var json = JSON.parse(xmlhttp.responseText)
+    if(json['status'] == 'error'){
+        alert('Failed with ' + json['reason']);
+    }else{
+        alert('Success')
+    }
+}
+</script>
+<div class="xmc-container" style="position: relative;">
+    <br>
+    <br>
+    <div class="panel-heading" style="width: 90%;margin: 0 auto;">
+        <h3 class="panel-title">
+            {% if is_logined == True and user['u'] == 'admin' %}
+            Welcome,{{user['u']}}
+            {% elif user['u'] != 'admin' %}
+            Please login with administrator account
+            {% else %}
+            Please login before.
+            {% endif %}
+        </h3>
+    </div>
+    {% if is_logined == True and user['u'] == 'admin' %}
+    <div class="panel-body" style="width: 90%;margin: 0 auto;">
+        Register requests
+    </div>
+    {% if regreqpool['status'] != 'error' %}
+    <table class="table" style="width: 90%;margin: 0 auto;">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Password MD5</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in poolinfo %}
+            <tr>
+                <td>{{ i['u'] }}</td>
+                <td>{{ i['p'] }}</td>
+                <td>
+                    <a class="btn btn-primary" href="javascript:location.reload();" onclick="accept({{poolinfo.index(i)}});">Accept</a>
+                    <a class="btn btn-primary" href="javascript:location.reload();" onclick="deny({{poolinfo.index(i)}});">Deny</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h3>Failed to get register requests pool, cause {{regreqpool['reason']}}</h3>
+    {% endif %}
+
+    {% endif %}
+    <br>
+    <br>
+</div>
