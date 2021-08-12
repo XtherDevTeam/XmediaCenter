@@ -50,7 +50,7 @@ class ChatroomServer(object):
             if self.msg_group.get(i) == None:
                 self.msg_group[i]=[]
         for i in self.msg_group:
-            if group_info['groups'].get(i) == None:
+            if group_info['groups'].count(i) == 0:
                 del i
 
     def run(self):

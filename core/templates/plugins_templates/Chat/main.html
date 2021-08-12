@@ -1,3 +1,58 @@
+<script>
+function do_exit_chatroom(name) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=chat_api&request=exit_chatroom&name=' + name,1);
+    xmlhttp.send();
+    result = JSON.parse(xmlhttp.responseText)
+    if(result['status'] == 'error'){
+        alert(result['reason']);
+    }else{
+        return;
+    }
+}
+function do_join_chatroom() {
+    var name = prompt('Input chatroom name:')
+    if(name == null){
+        alert('Canceled.')
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=chat_api&request=join_chatroom&name=' + name,1);
+    xmlhttp.send();
+    result = JSON.parse(xmlhttp.responseText)
+    if(result['status'] == 'error'){
+        alert(result['reason']);
+    }else{
+        return;
+    }
+}
+function do_create_chatroom() {
+    var name = prompt('Input chatroom name:')
+    if(name == null){
+        alert('Canceled.')
+    }
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=chat_api&request=create_chatroom&name=' + name,1);
+    xmlhttp.send();
+    result = JSON.parse(xmlhttp.responseText)
+    if(result['status'] == 'error'){
+        alert(result['reason']);
+    }else{
+        return;
+    }
+}
+function do_remove_chatroom(name) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET','/api?action=chat_api&request=remove_chatroom&name=' + name,1);
+    xmlhttp.send();
+    result = JSON.parse(xmlhttp.responseText)
+    if(result['status'] == 'error'){
+        alert(result['reason']);
+    }else{
+        return;
+    }
+}
+</script>
+
 <div class="xmc-container" style="position: relative;">
     <br>
     <br>
@@ -12,7 +67,9 @@
     </div>
     {% if is_logined == True %}
     <div class="panel-body" style="width: 90%;margin: 0 auto;">
-        Joined chatrooms
+        Joined chatrooms<br>
+        <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_join_chatroom();" role="button">Join</a>
+        <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_create_chatroom();" role="button">Create</a>
     </div>
     <table class="table" style="width: 90%;margin: 0 auto;">
         <thead>
@@ -22,7 +79,16 @@
             </tr>
         </thead>
         <tbody>
-            
+            {% for i in joined %}
+            <tr>
+                <td>{{i}}</td>
+                <td>
+                    <a class="btn btn-primary" href="javascript:;" onclick=";" role="button">Open</a>
+                    <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_exit_chatroom('{{i}}');" role="button">Exit</a>
+                    <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_remove_chatroom('{{i}}');" role="button">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
