@@ -147,6 +147,7 @@ def wdnmd():
     return modules
 
 def load_all_modules():
+    print('get called')
     for i in storage_info['modules']:
         modules.append(importlib.import_module('core.plugins.' + i + '.main'))
         modules[-1].requestCPR = wdnmd
@@ -159,15 +160,13 @@ def load_all_modules():
         else:
             printLog('core.plugins.' +i + '.main.register() is a bad function.','e')
 
-load_all_modules()
-
 # end of module apis
 
 def run():
-    server_obj.debug = True
     status = "running"
     server_obj.config['SECRET_KEY'] = '_XmediaCenter_' + str(os.urandom(114514))
     server_obj.session_cookie_name = 'XmediaCenterSession'
     #print(core.xmcp.makeUserInfomation(storage_info['users'][0]))
+    load_all_modules()
     server_obj.run(host=config['host'],port=config['port'])
     status = "stopped"

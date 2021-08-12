@@ -36,7 +36,7 @@ def api_request(request:flask.request):
         if str == '':
             break
         str = str.replace('\n','')
-        print(str)
+        print(str,end='')
         for i in str:
             print('\b',end='')
         print('\b',end='')
