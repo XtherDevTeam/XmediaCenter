@@ -67,6 +67,8 @@ def idx_of_chatroom(cid):
                                    'plugins_templates/Chat/chatroom.html',
                                    is_logined=is_logined,
                                    user=user,
+                                   userinfo=flask.session.get('userinfo'),
+                                   chatroom_name=cid,
                                )
                            ))
 

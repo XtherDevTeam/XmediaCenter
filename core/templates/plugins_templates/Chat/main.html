@@ -51,6 +51,9 @@ function do_remove_chatroom(name) {
         return;
     }
 }
+function do_open(name){
+    location.href = '/chatroom/' + name;
+}
 </script>
 
 <div class="xmc-container" style="position: relative;">
@@ -83,7 +86,7 @@ function do_remove_chatroom(name) {
             <tr>
                 <td>{{i}}</td>
                 <td>
-                    <a class="btn btn-primary" href="javascript:;" onclick=";" role="button">Open</a>
+                    <a class="btn btn-primary" href="javascript:do_open('{{i}}');" onclick=";" role="button">Open</a>
                     <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_exit_chatroom('{{i}}');" role="button">Exit</a>
                     <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_remove_chatroom('{{i}}');" role="button">Remove</a>
                 </td>

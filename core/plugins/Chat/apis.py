@@ -62,11 +62,11 @@ class ChatroomServer(object):
     def run_server(self):
         self.server.serveforever()
 
-    def push_message(self, msg:list):
+    def push_message(self, msg:dict):
         for i in self.msg_group[msg['group']]:
             for key, client in self.server.connections.items():
                 if client.address == i:
-                    client.send(json.dumps(msg))
+                    client.sendMessage(json.dumps(msg))
 
     def main_process(self):
         while True:
@@ -88,6 +88,7 @@ class ChatroomServer(object):
                                 client.sendMessage(json.dumps(
                                     {'status': 'error', 'reason': 'Invalid Message'}))
                             else:
+                                msg['userinfo'] = core.xmcp.parseUserInfo(msg['userinfo'])['u']
                                 if msg['msg'] == 'join':
                                     self.msg_group[msg['group']].append(
                                         client.address)
@@ -95,9 +96,11 @@ class ChatroomServer(object):
                                     self.msg_group[msg['group']]=[]
                                 self.push_message(msg)
                 elif message[0] == 'lost':
-                    for key, i in self.msg_group:
-                        if i.count(message[0]):
-                            del i[i.index(message[0])]
+                    for i in self.msg_group:
+                        print(self.msg_group[i].count(message[1]),self.msg_group[i])
+                        if self.msg_group[i].count(message[1]):
+                            print('removing from ' + i)
+                            del self.msg_group[i][self.msg_group[i].index(message[1])]
 
 server=ChatroomServer(11450)
 
