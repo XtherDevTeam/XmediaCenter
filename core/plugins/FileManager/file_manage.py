@@ -23,6 +23,9 @@ def response_with_file(path,request:flask.request):
             startIndex = int(request.headers.get('Range')[request.headers.get('Range').find('=')+1:request.headers.get('Range').find('-')])
             endIndex = startIndex + part_length - 1
             fileLength = os.path.getsize(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path))
+
+            if endIndex > fileLength:
+                endIndex = fileLength - 1
             
             response_file = bytes()
 
