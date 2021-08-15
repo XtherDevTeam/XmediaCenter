@@ -35,7 +35,7 @@ def api_request(request:flask.request):
     if type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'get_filelist':
         return json.dumps(core.plugins.FileManager.file_manage.get_file_list(request.args.get('path')))
     elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'download':
-        return core.plugins.FileManager.file_manage.response_with_file(request.args.get('path'))
+        return core.plugins.FileManager.file_manage.response_with_file(request.args.get('path'),request)
     elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'is_dir' and flask.session.get('userinfo') != None:
         return core.plugins.FileManager.file_manage.is_directory(request.args.get('path'))
     elif type(request.args.get('request')).__name__ == 'str' and request.args.get('request') == 'remove' and flask.session.get('userinfo') != None:

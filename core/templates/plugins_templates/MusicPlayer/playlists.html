@@ -103,9 +103,11 @@ function progress_bar_init() {
         console.log('this.value-> ',document.getElementById('song-progress-bar').value )
         document.getElementById('player').currentTime = document.getElementById('song-progress-bar').value;
     }
+    document.getElementById('player').ontimeupdate = function () {
+        document.getElementById('song-progress-bar').value = document.getElementById('player').currentTime;
+    }
     setInterval(function () {
         document.getElementById('song-progress-bar').max = document.getElementById('player').duration;
-        document.getElementById('song-progress-bar').value = document.getElementById('player').currentTime;
         var now_minutes = Math.trunc(Math.trunc(document.getElementById('player').currentTime) / 60);
         var now_seconds = Math.trunc(Math.trunc(document.getElementById('player').currentTime) % 60);
         var tot_minutes = Math.trunc(Math.trunc(document.getElementById('song-progress-bar').max) / 60);
