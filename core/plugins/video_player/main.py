@@ -58,6 +58,7 @@ def idx_of_vp():
                                     is_logined = is_logined,
                                     user = user,
                                     path = core.api.getAbsPath(flask.request.values.get('path')),
+                                    filename = core.api.get_filename(flask.request.values.get('path'))
                                 )
                             ))
 

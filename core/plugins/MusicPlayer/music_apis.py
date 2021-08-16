@@ -2,16 +2,16 @@ import json,os,sys,pymediainfo,core.api,hashlib
 
 def init_playlists(userinfo:str):
     # init config directory
-    if os.access('core/storage/.musicplayer',os.F_OK):
+    if os.access('core/plugins/MusicPlayer/.musicplayer',os.F_OK):
         None
     else:
-        os.mkdir('core/storage/.musicplayer')
+        os.mkdir('core/plugins/MusicPlayer/.musicplayer')
 
     # init user playlists
-    if os.access('core/storage/.musicplayer/playlists-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json',os.F_OK):
+    if os.access('core/plugins/MusicPlayer/.musicplayer/playlists-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json',os.F_OK):
         None
     else:
-        with open('core/storage/.musicplayer/playlists-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json','w+',encoding='utf-8') as file:
+        with open('core/plugins/MusicPlayer/.musicplayer/playlists-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json','w+',encoding='utf-8') as file:
             file.write(json.dumps([]))
 
 def get_playlists(userinfo:str):
@@ -20,7 +20,7 @@ def get_playlists(userinfo:str):
     
     init_playlists(userinfo)
     try:
-        with open('core/storage/.musicplayer/playlists-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json','r+',encoding='utf-8') as file:
+        with open('core/plugins/MusicPlayer/.musicplayer/playlists-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json','r+',encoding='utf-8') as file:
             return {'status':'success','playlists':json.loads(file.read())}
     except Exception as e:
         return {'status':'error','reason':str(e)}
@@ -29,7 +29,7 @@ def sync_playlists(pls:dict,userinfo:str):
     try:
         if userinfo == None or userinfo == '':
             None
-        with open('core/storage/.musicplayer/playlists-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json','w+',encoding='utf-8') as file:
+        with open('core/plugins/MusicPlayer/.musicplayer/playlists-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json','w+',encoding='utf-8') as file:
             file.write(json.dumps(pls['playlists']))
             return {'status':'success'}
     except Exception as e:
