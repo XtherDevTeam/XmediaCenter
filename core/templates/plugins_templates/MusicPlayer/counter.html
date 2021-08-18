@@ -1,0 +1,37 @@
+
+<div class="xmc-container" style="position: relative;">
+    <div style="margin: auto auto;">
+        <br><br>
+        {% if is_logined == False %}
+        <center><h1>
+            Please login before.
+        </h1></center>
+        {% else %}
+        <div class="panel-heading" style="width: 90%;margin: 0 auto;">
+            <h3> {{user['u']}}'s music statisitics: </h3>
+        </div>
+        <div class="panel-body" style="width: 90%;margin: 0 auto;">
+            Music playback times <br><br>
+            <a class="btn btn-primary" href="/music" role="button">Back</a>
+            <br><br>
+            <table class="table" style="margin: 0 auto;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in song_count %}
+                    <tr>
+                        <td>{{i[0]}}</td>
+                        <td>{{i[1]}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        <br><br>
+    </div>
+</div>

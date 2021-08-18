@@ -1,5 +1,6 @@
 from types import CodeType
-import flask,core.plugins.MusicPlayer.music_apis,core.api,core.xmcp
+import flask,core.plugins.MusicPlayer.music_apis,core.api,core.xmcp,core.plugins.MusicPlayer.counter,pymediainfo
+from werkzeug.utils import redirect
 from flask.globals import g
 from flask.templating import render_template
 import json
@@ -45,6 +46,17 @@ def api_request(request:flask.request):
         if pname[0] == '"':
             pname = pname[1:-1]
         return json.dumps(core.plugins.MusicPlayer.music_apis.create_playlist(pname,flask.session.get('userinfo')))
+    elif request_item == 'half_pasted_detect':
+        filepath = request.values.get('path')
+        if filepath == None or filepath == '':
+            return json.dumps({'status':'error','reason':'unknown request'})
+        elif flask.session.get('userinfo') == None:
+            return json.dumps({'status':'error','reason':'Invalid Session'})
+        try:
+            audio_info = pymediainfo.MediaInfo.parse('core/storage/' + core.api.getAbsPath(filepath))
+            return core.plugins.MusicPlayer.counter.update_counter_file(flask.session.get('userinfo'),json.loads(audio_info.to_json())['tracks'][0]['title'])
+        except Exception as e:
+            return {'status':'error','reason':str(e)}
     elif request_item == 'add_song':
         pid = request.values.get('pid')
         path = request.values.get('path') # already is abs path
@@ -102,11 +114,27 @@ def idx_of_playlists(name:str):
                                     name = name
                                 )
                             ))
-    None
+
+def idx_of_count():
+    is_logined = flask.session.get('userinfo') != None
+    user = {}
+    if is_logined:
+        user = core.xmcp.parseUserInfo(flask.session.get('userinfo'))
+    return render_template("plugins_templates/main/index.html",
+                            plugins_list=get_plugins_path_list(),
+                            renderText=flask.Markup(
+                                render_template(
+                                    'plugins_templates/MusicPlayer/counter.html',
+                                    is_logined = is_logined,
+                                    user = user,
+                                    song_count = core.plugins.MusicPlayer.counter.get_program_readable_counter_data(flask.session.get('userinfo'))
+                                )
+                            ))
 
 def register(server:flask.Flask):
     #print(requestCPR)
     server.add_url_rule('/music',view_func=idx_of_music)
+    server.add_url_rule('/music/count',view_func=idx_of_count)
     server.add_url_rule('/music/playlists/<name>',view_func=idx_of_playlists)
     return {
         'registered_api': ['music_api']
