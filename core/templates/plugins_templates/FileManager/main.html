@@ -127,6 +127,7 @@ function do_download() {
             <thead>
                 <tr>
                     <th>Filename</th>
+                    <th>MIME Type</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -134,6 +135,7 @@ function do_download() {
                 {% for i in filenames %}
                 <tr>
                     <td>{{i['filename']}}</td>
+                    <td>{{i['mime']}}</td>
                     <td>
                         {% if is_logined == True %}
                         <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_remove('{{i['filename']|safe}}')">Remove</a>

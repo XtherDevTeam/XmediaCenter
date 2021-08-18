@@ -1,5 +1,13 @@
-import os,sys,json,core.api,flask,shutil,magic
+import os,sys,json,core.api,flask,shutil,mimetypes
 from posixpath import expanduser
+
+def get_mime(path:str):
+    # os.getcwd()+'/core/storage/' + core.api.getAbsPath(path)
+    a = mimetypes.guess_type(path)
+    if a[0] == None:
+        return 'application/octet-stream'
+    else:
+        return a[0]
 
 def is_directory(path:str):
     if path[0] == '"':
@@ -11,7 +19,7 @@ def response_with_file(path,request:flask.request):
         path = path[1:-1]
     try:
         is_preview = True
-        if magic.from_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),mime=True) == 'application/octet-stream':
+        if get_mime(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path)) == 'application/octet-stream':
             is_preview = False
         else:
             is_preview = True
@@ -37,12 +45,12 @@ def response_with_file(path,request:flask.request):
 
             response.headers['Accept-Ranges'] = 'bytes'
             response.headers['Content-Range'] = 'bytes ' + str(startIndex) + '-' + str(endIndex) + '/' + str(fileLength)
-            response.headers['Content-Type'] = magic.from_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),mime=True)
+            response.headers['Content-Type'] = get_mime(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path))
 
             response.status_code = 206
             return response
         
-        return flask.send_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),as_attachment=not is_preview,attachment_filename=core.api.get_filename(path),mimetype=magic.from_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),mime=True))
+        return flask.send_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),as_attachment=not is_preview,attachment_filename=core.api.get_filename(path),mimetype=get_mime(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path)))
     except Exception as e:
         return json.dumps({ 'status':'error','reason':'Failed:' + str(e) })
 
@@ -65,7 +73,8 @@ def get_file_list(path):
         if is_directory(core.api.getAbsPath(path+'/'+i)):
             final.append( { 'filename':i,'type':'dir' } )
         else:
-            final.append( { 'filename':i,'type':'file','mime':magic.from_file('core/storage/' + core.api.getAbsPath(path+'/'+i),mime=True) } )
+            print('MIME of ','core/storage/' + core.api.getAbsPath(path+'/'+i),get_mime('core/storage/' + core.api.getAbsPath(path+'/'+i)))
+            final.append( { 'filename':i,'type':'file','mime':get_mime('core/storage/' + core.api.getAbsPath(path+'/'+i)) } )
     return final
 
 def remove(path):
