@@ -4,5 +4,10 @@
     "storage_path": "storage",
     "default_page_path": "index.html",
     "templates_path": "templates",
-    "static_path": "static"
+    "static_path": "static",
+    "enable-https": false,
+    "ssl-cert": [
+        "ssl/server.pem",
+        "ssl/server.key"
+    ]
 }

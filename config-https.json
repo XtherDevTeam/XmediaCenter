@@ -1,0 +1,13 @@
+{
+    "host": "0.0.0.0",
+    "port": 11452,
+    "storage_path": "storage",
+    "default_page_path": "index.html",
+    "templates_path": "templates",
+    "static_path": "static",
+    "enable-https": true,
+    "ssl-cert": [
+        "ssl/xiaokang00010.top/server.pem",
+        "ssl/xiaokang00010.top/server.key"
+    ]
+}

@@ -4,4 +4,4 @@ init:
 	chmod +x XmediaCenter.py
 
 run: XmediaCenter.py
-	./XmediaCenter.py
+	./XmediaCenter.py config-http.json

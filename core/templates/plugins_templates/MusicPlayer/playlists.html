@@ -112,8 +112,12 @@ function progress_bar_init() {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.open('GET','/api?action=music_api&request=half_pasted_detect&path=' + current_playlist[current_index-1][3])
             xmlhttp.send()
+            xmlhttp.onreadystatechange = function () {
+                console.log(xmlhttp.responseText)
+            }
+        }else{
+            console.log(document.getElementById('player').currentTime,document.getElementById('player').duration * 0.5)
         }
-        
     }
     setInterval(function () {
         document.getElementById('song-progress-bar').max = document.getElementById('player').duration;

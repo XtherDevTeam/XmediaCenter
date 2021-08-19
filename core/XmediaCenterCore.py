@@ -4,7 +4,7 @@ import os,json,sys,flask,core.api,core.xmcp,hashlib,importlib
 from flask.wrappers import Request
 from flask.templating import render_template
 
-with open('config.json','r+') as config:
+with open(sys.argv[1],'r+') as config:
     config = json.loads(config.read())
 
 log_file = open('server.log','w+')
@@ -168,5 +168,8 @@ def run():
     server_obj.session_cookie_name = 'XmediaCenterSession'
     #print(core.xmcp.makeUserInfomation(storage_info['users'][0]))
     load_all_modules()
-    server_obj.run(host=config['host'],port=config['port'])
+    if config['enable-https']:
+        server_obj.run(host=config['host'],port=config['port'],ssl_context = (config['ssl-cert'][0],config['ssl-cert'][1]))
+    else:
+        server_obj.run(host=config['host'],port=config['port'])
     status = "stopped"

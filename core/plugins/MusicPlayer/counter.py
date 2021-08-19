@@ -50,6 +50,6 @@ def get_program_readable_counter_data(userinfo:str):
     file = file['counter']['content']
     result = []
     for key in file:
-        result.append( [ key , file[key] ] )
-    result.sort()
+        result.append( [ file[key] , key ] )
+    result.sort(reverse=True)
     return result
