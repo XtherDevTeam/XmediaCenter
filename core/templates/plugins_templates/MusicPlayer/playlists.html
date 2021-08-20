@@ -89,8 +89,8 @@ function player_start_with_playlist(mode = 'm_normal'){
     current_playlist = []
     current_playlist_url = []
     {% for i in info['playlist'] %}
-    for_search.push("{{i['title']|safe}}")
-    current_playlist.push(["{{i['title']|safe}}","{{i['album']|safe}}","{{i['performer']|safe}}","{{i['path']|safe}}"]);
+    for_search.push("{{i['path']}}")
+    current_playlist.push(["{{i['title']}}","{{i['album']}}","{{i['performer']}}","{{i['path']}}"]);
     current_playlist_url.push("/api?action=fm_api&request=download&path={{i['path']}}");
     {% endfor %}
     document.getElementById('player').onended = function(){
@@ -147,8 +147,6 @@ function progress_bar_init() {
         </div>
         <div class="panel-body" style="width: 90%;margin: 0 auto;">
             <br>
-            <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_import()" role="button">Import song</a><br>
-            <br>
             <div class="music_player">
                 <h5 id="current_lbl">Current: </h5>
                 <audio id="player" class="player" src=""></audio>
@@ -158,6 +156,7 @@ function progress_bar_init() {
                 <a class="btn btn-primary" href="#" onclick="on_change_state()" role="button">Play/Pause</a>
                 <a class="btn btn-primary" href="#" onclick="on_next_song()"    role="button">Next</a>
                 <a class="btn btn-primary" href="#" onclick="on_prev_song()"    role="button">Prev</a>
+                <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_import()" role="button">Import song</a><br>
                 <input id="song-volume-changer" type="range" min="0" max="100" value="100"></input>
             </div>
             <br><br>
@@ -173,7 +172,7 @@ function progress_bar_init() {
                 <tbody>
                     {% for i in info['playlist'] %}
                     <tr>
-                        <td><a href="#" onclick="current_index=for_search.indexOf(&quot;{{i['title']}}&quot;);on_next_song();">{{i['title']}}</a></td>
+                        <td><a href="#" onclick="current_index=for_search.indexOf(&quot;{{i['path']}}&quot;);on_next_song();">{{i['title']}}</a></td>
                         <td>{{i['album']}}</td>
                         <td>{{i['performer']}}</td>
                         <td>
