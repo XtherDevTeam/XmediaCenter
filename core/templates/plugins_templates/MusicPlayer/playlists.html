@@ -71,6 +71,7 @@ function on_next_song(){
     }else if(current_index==-1){
         current_index = current_playlist.length-1;
     }
+    state = true;
     document.getElementById('current_lbl').innerHTML = 'Current: '+ current_playlist[current_index][0] + ' - ' + current_playlist[current_index][1] + ' - ' + current_playlist[current_index][2];
     document.getElementById('player').src = current_playlist_url[current_index++];
     document.getElementById('song-progress-bar').min = 0;
