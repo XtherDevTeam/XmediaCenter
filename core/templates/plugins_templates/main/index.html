@@ -68,14 +68,16 @@
   loadCSS();
 </script>
 
-<body style="opacity: 0;background-image: url(/static/background.jpg); background-size: cover; background-attachment:fixed;width: 100%;height: 100%;">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="opacity: 0.9;">
-    <div class="container-fluid">
+<body
+  style="opacity: 0;background-image: url(/static/background.jpg); background-size: cover; background-attachment:fixed;width: 100%;height: 100%;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light"
+    style="position: fixed;box-shadow:0px 2px 10px rgb(53, 53, 53);width: 100%;z-index: 114514;">
+    <div class="container-fluid" style="width: auto;">
       <a class="navbar-brand" href="/main">XmediaCenter</a>
       <button class="navbar-toggler" type="button" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div id="navbar-main" class="navbar-collapse" id="navbarSupportedContent">
+      <div id="navbar-main">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/main">Home</a>
@@ -90,15 +92,16 @@
       </div>
     </div>
   </nav>
+  <div style="width: 100%;height: 4rem;"></div>
   <script>
     var navbar_isactive = "";
     console.log('is mobile:' + isMobile())
-    if(isMobile()){
+    if (isMobile()) {
       navbar_isactive = "none";
-    }else{
+    } else {
       navbar_isactive = "";
     }
-    function refresh_navbar(){
+    function refresh_navbar() {
       console.log('i got refreshed. ' + document.getElementById('navbar-main').style.display)
       document.getElementById('navbar-main').style.display = navbar_isactive;
       console.log('i got refreshed. ' + document.getElementById('navbar-main').style.display)
@@ -130,6 +133,7 @@
 <script>
   // loadCSS += 'transition: all 1.5s;opacity: 0.9;';
   document.getElementsByTagName('body')[0].style.transition = 'all 0.5s';
-  document.getElementsByTagName('body')[0].style.opacity = 0.9;
+  document.getElementsByTagName('body')[0].style.opacity = 1;
 </script>
+
 </html>
