@@ -1,8 +1,8 @@
 html, body { height: 100%; }
 
 .xmc-container{
+    opacity: 0;
     width: 90%;
-    opacity: 0.9;
     background-color: white;
     margin: 0 auto;
 }
