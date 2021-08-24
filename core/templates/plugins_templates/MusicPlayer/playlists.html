@@ -161,9 +161,10 @@ function progress_bar_init() {
                 <input id="song-volume-changer" type="range" min="0" max="100" value="100"></input>
             </div>
             <br><br>
-            <table class="table" style="width: 100%; table-layout: fixed; word-break: break-all;">
+            <table class="table" style="width: 100%; table-layout: fixed; word-break: break-all;white-space: nowrap;">
                 <thead>
                     <tr>
+                        <th style="width: 4rem;">Number</th>
                         <th>Title</th>
                         <th>Album</th>
                         <th>Performer</th>
@@ -173,11 +174,14 @@ function progress_bar_init() {
                 <tbody>
                     {% for i in info['playlist'] %}
                     <tr>
-                        <td><a href="#" onclick="current_index=for_search.indexOf(&quot;{{i['path']}}&quot;);on_next_song();">{{i['title']}}</a></td>
-                        <td>{{i['album']}}</td>
-                        <td>{{i['performer']}}</td>
+                        <td><div style="text-overflow: ellipsis;overflow: hidden;height: 2.75rem;">{{info['playlist'].index(i)}}</div></td>
+                        <td><div style="text-overflow: ellipsis;overflow: hidden;height: 2.75rem;"><a href="#" onclick="current_index=for_search.indexOf(&quot;{{i['path']}}&quot;);on_next_song();">{{i['title']}}</a></div></td>
+                        <td><div style="text-overflow: ellipsis;overflow: hidden;height: 2.75rem;">{{i['album']}}</div></td>
+                        <td><div style="text-overflow: ellipsis;overflow: hidden;height: 2.75rem;">{{i['performer']}}</div></td>
                         <td>
+                            <div style="text-overflow: ellipsis;overflow: hidden;height: 2.75rem;">
                             <a class="btn btn-primary" href="javascript:location.reload();" onclick="do_remove_song('{{i['path']}}')" role="button">Remove song</a>
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
