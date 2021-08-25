@@ -1,4 +1,4 @@
-import os,sys,magic,lxml.etree
+import os,sys,lxml.etree
 
 def damuku_parser(origin_xml):
     ret = []
