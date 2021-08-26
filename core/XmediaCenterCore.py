@@ -4,10 +4,11 @@ import os,json,sys,flask,core.api,core.xmcp,hashlib,importlib
 from flask.wrappers import Request
 from flask.templating import render_template
 
-with open(sys.argv[1],'r+') as config:
-    config = json.loads(config.read())
+if __name__ == 'main':
+    with open(sys.argv[1],'r+') as config:
+        config = json.loads(config.read())
 
-log_file = open('server.log','w+')
+    log_file = open('server.log','w+')
 
 def printLog(toprint:str,level:str):
     final = ''
@@ -61,8 +62,12 @@ def create_account_with_md5(username:str,password:str):
 
 def remove_account(username:str,password:str):
     password += '_XmediaCenter'
-    del storage_info['users'][(storage_info['users'].index({ 'username': username , 'pwd_encoded':hashlib.md5(password.encode(encoding='utf-8')).hexdigest() }))]
-    syncConfig()
+    try:
+        del storage_info['users'][(storage_info['users'].index({ 'username': username , 'pwd_encoded':hashlib.md5(password.encode(encoding='utf-8')).hexdigest() }))]
+        syncConfig()
+        return True
+    except Exception as e:
+        return False
 
 # end of server apis
 
