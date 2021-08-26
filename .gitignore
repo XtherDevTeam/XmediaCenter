@@ -1,3 +1,4 @@
 ssl
 ddns
 *.json
+core/*.json
