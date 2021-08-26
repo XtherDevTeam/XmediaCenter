@@ -70,7 +70,7 @@ def remove_account(username:str,password:str):
 server_obj = flask.Flask(__name__)
 
 # init flask
-
+config = []
 session_map = []
 
 @server_obj.route("/")
