@@ -1,15 +1,13 @@
 #!/bin/python3
-import core.XmediaCenterCore,core.xmcp,sys
-
-print(sys.argv[2])
+import core.XmediaCenterCore as Core,core.xmcp,sys
 
 if sys.argv[1] == 'account':
     if sys.argv[2] == 'new':
-        print(core.XmediaCenterCore.create_account(sys.argv[3],sys.argv[4]))
+        print(Core.create_account(sys.argv[3],sys.argv[4]))
     elif sys.argv[2] == 'remove':
-        print(core.XmediaCenterCore.remove_account(sys.argv[3],sys.argv[4]))
+        print(Core.remove_account(sys.argv[3],sys.argv[4]))
     elif sys.argv[2] == 'modify':
-        if core.XmediaCenterCore.remove_account(sys.argv[3],sys.argv[4]):
-            print(core.XmediaCenterCore.create_account(sys.argv[3],sys.argv[5]))
+        if Core.remove_account(sys.argv[3],sys.argv[4]):
+            print(Core.create_account(sys.argv[3],sys.argv[5]))
         else:
             print('False')

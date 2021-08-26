@@ -4,11 +4,7 @@ import os,json,sys,flask,core.api,core.xmcp,hashlib,importlib
 from flask.wrappers import Request
 from flask.templating import render_template
 
-if __name__ == 'main':
-    with open(sys.argv[1],'r+') as config:
-        config = json.loads(config.read())
-
-    log_file = open('server.log','w+')
+log_file = open('server.log','w+')
 
 def printLog(toprint:str,level:str):
     final = ''
@@ -25,10 +21,10 @@ def printLog(toprint:str,level:str):
 
 
 status = "stopped"
-if os.access(core.api.getAbsPath('core/info.json'),os.F_OK) == False:
+if os.access(core.api.getAbsPath('info.json'),os.F_OK) == False:
     # first run
     printLog(".exmc path does not exist. will create one",'i')
-    with open(core.api.getAbsPath('core/info.json'),'w+') as file:
+    with open(core.api.getAbsPath('info.json'),'w+') as file:
         # default config file template
         dict = {
             "storage_pool_name": "Xiaokang00010's 快乐小站",
@@ -38,13 +34,13 @@ if os.access(core.api.getAbsPath('core/info.json'),os.F_OK) == False:
         file.write(json.dumps(dict))
     printLog(".exmc directory created success.",'i')
 
-with open(core.api.getAbsPath("core/info.json"),'r+') as file:
+with open(core.api.getAbsPath("info.json"),'r+') as file:
     storage_info = json.loads(file.read())
 
 # server apis
 
 def syncConfig():
-    with open(core.api.getAbsPath('core/info.json'),'w+') as file:
+    with open(core.api.getAbsPath('info.json'),'w+') as file:
         file.write(json.dumps(storage_info))
 
 def create_account(username:str,password:str):
@@ -168,6 +164,8 @@ def load_all_modules():
 # end of module apis
 
 def run():
+    with open(sys.argv[1],'r+') as config:
+        config = json.loads(config.read())
     status = "running"
     server_obj.config['SECRET_KEY'] = '_XmediaCenter_' + str(os.urandom(114514))
     server_obj.session_cookie_name = 'XmediaCenterSession'
