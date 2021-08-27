@@ -66,7 +66,7 @@ def remove_song(pid:int,path:str,userinfo:str):
         if pls['status'] == 'error':
             return pls
         if pls['playlists'][pid]['songs'].count(path) == 0:
-            print(pls['playlists'][pid]['songs'])
+            #print(pls['playlists'][pid]['songs'])
             return {'status':'error','reason':'song is not in list:' + path}
         del pls['playlists'][pid]['songs'][pls['playlists'][pid]['songs'].index(path)]
         return sync_playlists(pls,userinfo)
@@ -98,7 +98,7 @@ def get_playlist_id(name:str,userinfo:str):
 
 def get_songs_info(pid:int,userinfo:str):
     pls = get_playlists(userinfo)
-    print(pls['playlists'],len(pls['playlists']))
+    #print(pls['playlists'],len(pls['playlists']))
     if pls['status'] == 'error':
         return pls
     elif len(pls['playlists']) <= pid:

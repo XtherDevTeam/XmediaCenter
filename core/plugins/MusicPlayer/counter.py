@@ -4,10 +4,8 @@ def init_counter_file(userinfo:str):
     if os.access(os.getcwd() + '/core/plugins/MusicPlayer/.musicplayer/counter-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json',os.F_OK):
         None
     else:
-        print(json.dumps( { 'type':'Music Counter','content':{} } ))
         with open(os.getcwd() + '/core/plugins/MusicPlayer/.musicplayer/counter-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json','w+') as file:
             file.write(json.dumps( { 'type':'Music Counter','content':{} } ))
-            print('你妈什么时候死啊')
 
 def get_counter_file(userinfo:str):
     init_counter_file(userinfo)
@@ -20,7 +18,6 @@ def get_counter_file(userinfo:str):
         return {'status':'error','reason':str(e)}
 
 def sync_counter_file(userinfo:str,file_:dict):
-    print(file_)
     init_counter_file(userinfo)
     try:
         with open(os.getcwd() + '/core/plugins/MusicPlayer/.musicplayer/counter-' + hashlib.md5(userinfo.encode('utf-8')).hexdigest() + '.json','w+') as file:
@@ -53,3 +50,11 @@ def get_program_readable_counter_data(userinfo:str):
         result.append( [ file[key] , key ] )
     result.sort(reverse=True)
     return result
+
+def count_all_playbacktime(session):
+    obj = count_all_playbacktime(session)
+    first = len(obj)
+    second = 0
+    for i in obj:
+        second += obj[i][0]
+    return [first,second]

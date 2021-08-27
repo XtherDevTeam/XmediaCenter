@@ -127,7 +127,8 @@ def idx_of_count():
                                     'plugins_templates/MusicPlayer/counter.html',
                                     is_logined = is_logined,
                                     user = user,
-                                    song_count = core.plugins.MusicPlayer.counter.get_program_readable_counter_data(flask.session.get('userinfo'))
+                                    song_count = core.plugins.MusicPlayer.counter.get_program_readable_counter_data(flask.session.get('userinfo')),
+                                    playbacktime_count = core.plugins.MusicPlayer.counter.count_all_playbacktime(flask.session.get('userinfo'))
                                 )
                             ))
 
