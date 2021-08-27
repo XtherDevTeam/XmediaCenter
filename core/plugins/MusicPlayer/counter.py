@@ -52,9 +52,10 @@ def get_program_readable_counter_data(userinfo:str):
     return result
 
 def count_all_playbacktime(session):
-    obj = count_all_playbacktime(session)
+    obj = get_program_readable_counter_data(session)
     first = len(obj)
     second = 0
     for i in obj:
-        second += obj[i][0]
+        print(i)
+        second += i[0]
     return [first,second]
