@@ -56,6 +56,5 @@ def count_all_playbacktime(session):
     first = len(obj)
     second = 0
     for i in obj:
-        print(i)
         second += i[0]
     return [first,second]
