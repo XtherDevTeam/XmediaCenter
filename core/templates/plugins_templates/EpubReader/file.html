@@ -15,7 +15,7 @@ init()
 
 function goto_current_index(str){
     if(files.indexOf('OEBPS/'+str) != -1) window.location = window.location + '&index=' + String(files.indexOf('OEBPS/'+str))
-    if(files.indexOf('OPS/'+str) != -1) window.location = window.location + '&index=' + String(files.indexOf('OPS/'+str))
+    else if(files.indexOf('OPS/'+str) != -1) window.location = window.location + '&index=' + String(files.indexOf('OPS/'+str))
     else window.location = window.location + '&index=' + String(files.indexOf(str))
 }
 

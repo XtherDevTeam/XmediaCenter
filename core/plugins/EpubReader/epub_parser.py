@@ -35,8 +35,14 @@ class EpubObject(object):
         :return:
         """
         root = self.fromstring(raw)
-        self.title = root.xpath('//dc:title', namespaces={'dc': NAMESPACES['dc']})[0].text
-        self.author = root.xpath('//dc:creator', namespaces={'dc': NAMESPACES['dc']})[0].text
+        try:
+            self.title = root.xpath('//dc:title', namespaces={'dc': NAMESPACES['dc']})[0].text
+        except IndexError as e:
+            self.title = ''
+        try:
+            self.author = root.xpath('//dc:creator', namespaces={'dc': NAMESPACES['dc']})[0].text
+        except IndexError as e:
+            self.author = ''
 
     def open(self, book_id=None):
         if book_id:
@@ -88,8 +94,9 @@ def changeAllResources(tree:ElementTree.Element,request_epub:str,xmlfilepath:str
         i = changeAllResources(i,request_epub,xmlfilepath);
     return tree
 
-def covertToViewableHtml(xml:str,request_epub:str,xmlfilepath:str):
+def covertToViewableHtml(xmls:bytes,request_epub:str,xmlfilepath:str):
     xmlfilepath = xmlfilepath[0:xmlfilepath.find(get_filename(xmlfilepath))]
-    tree = ElementTree.fromstring(xml)
+    xmls = xmls.decode('utf-8').replace(r'&nbsp;',r'&#160;')
+    tree = ElementTree.fromstring(xmls)
     tree = changeAllResources(tree,request_epub,xmlfilepath)
     return ElementTree.tostring(tree)

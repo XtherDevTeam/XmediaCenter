@@ -1,4 +1,5 @@
 #!/bin/python3
+from core.api import get_filename, getAbsPath
 import os
 import zipfile
 import sys
@@ -6,6 +7,7 @@ import json
 
 from lxml import etree
 from bs4 import BeautifulStoneSoup
+from xml.etree import ElementTree
 
 RECOVER_PARSER = etree.XMLParser(recover=True, no_network=True)
 NAMESPACES = {
@@ -35,11 +37,11 @@ class EpubObject(object):
         root = self.fromstring(raw)
         try:
             self.title = root.xpath('//dc:title', namespaces={'dc': NAMESPACES['dc']})[0].text
-        except:
+        except IndexError as e:
             self.title = ''
         try:
             self.author = root.xpath('//dc:creator', namespaces={'dc': NAMESPACES['dc']})[0].text
-        except:
+        except IndexError as e:
             self.author = ''
 
     def open(self, book_id=None):
@@ -64,9 +66,11 @@ class EpubObject(object):
 
         ncx_bs = BeautifulStoneSoup(self.f.read(ncx))
         try:
-            self.chapters = [(nav.navlabel.text, nav.content['src']) for
-                            nav in ncx_bs.findAll('navmap')[0].findAll('navpoint')]
-        except:
+            self.chapters = []
+            for i in ncx_bs.findAll('navPoint'):
+                self.chapters.append( [ i.findAll('navLabel')[0].findAll('text')[0].get_text() , i.findAll('content')[0].get('src') ] )
+        except Exception as e:
+            print(e)
             self.chapters = []
 
 def parse(filename:str):
@@ -78,3 +82,20 @@ def parse(filename:str):
     for i in epub.f.filelist:
         result['files'][i.filename] = epub.f.read(i.filename)
     return result
+
+def changeAllResources(tree:ElementTree.Element,request_epub:str,xmlfilepath:str):
+    if tree.get('href') != None:
+        filepath = getAbsPath(xmlfilepath + tree.get('href'))
+        tree.set('href','/api?action=epub_api&request=get_file_in_epub&epub=%22' + request_epub + '%22&file=' + filepath)
+    if tree.get('src') != None:
+        filepath = getAbsPath(xmlfilepath + tree.get('src'))
+        tree.set('src','/api?action=epub_api&request=get_file_in_epub&epub=%22' + request_epub + '%22&file=' + filepath)
+    for i in tree:
+        i = changeAllResources(i,request_epub,xmlfilepath);
+    return tree
+
+def covertToViewableHtml(xml:str,request_epub:str,xmlfilepath:str):
+    xmlfilepath = xmlfilepath[0:xmlfilepath.find(get_filename(xmlfilepath))]
+    tree = ElementTree.fromstring(xml)
+    tree = changeAllResources(tree,request_epub,xmlfilepath)
+    return ElementTree.tostring(tree)
