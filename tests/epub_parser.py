@@ -33,8 +33,14 @@ class EpubObject(object):
         :return:
         """
         root = self.fromstring(raw)
-        self.title = root.xpath('//dc:title', namespaces={'dc': NAMESPACES['dc']})[0].text
-        self.author = root.xpath('//dc:creator', namespaces={'dc': NAMESPACES['dc']})[0].text
+        try:
+            self.title = root.xpath('//dc:title', namespaces={'dc': NAMESPACES['dc']})[0].text
+        except:
+            self.title = ''
+        try:
+            self.author = root.xpath('//dc:creator', namespaces={'dc': NAMESPACES['dc']})[0].text
+        except:
+            self.author = ''
 
     def open(self, book_id=None):
         if book_id:
