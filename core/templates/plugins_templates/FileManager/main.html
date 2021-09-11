@@ -91,6 +91,11 @@ function do_download() {
         }
     }
 }
+
+function do_open_epub(str) {
+    window.location = '/reader?path=' + str;
+}
+
 </script>
 
 <div class="xmc-container" style="position: relative;">
@@ -143,6 +148,11 @@ function do_download() {
                         {% endif %}
                         {% if i['type'] == 'file'%}
                         <a href="javascript:location.reload()" class="btn btn-primary" role="button" onclick="do_download_renamed('{{i['filename']|safe}}')">Download</a>
+                        
+                        {% if i['mime'] == 'application/epub+zip' and modules_list.count('Book Reader') != 0  %}
+                        <a href="#" class="btn btn-primary" role="button" onclick="do_open_epub(&quot;{{path}}/{{i['filename']|safe}}&quot;)">Open with epub reader</a>
+                        {% endif %}
+
                         {% if modules_list.count('MusicPlayer') != 0 %}
 
                         {% if i['mime'][0:5] == 'audio' and is_logined == True %}
