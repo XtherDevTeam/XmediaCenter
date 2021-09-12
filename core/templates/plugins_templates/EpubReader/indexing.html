@@ -2,7 +2,7 @@
 
 var chapters = [];
 var files = [];
-
+var current_index = {{ now_index }};
 function init() {
     {% for i in book['chapters'] %}
     chapters.push(["{{i[0]|safe}}","{{i[1]|safe}}"])
@@ -21,24 +21,47 @@ function back_to_indexing(){
 }
 
 function go_next(idx) {
-    idx++;
-    if(idx == -1 || idx >= {{ total_index }}){
-        idx--;
+    current_index++;
+    if(current_index == -1 || current_index >= {{ total_index }}){
+        current_index--;
     }
-    goto_current_index(files[idx]);
+    // goto_current_index(files[current_index]);
+    create_iframe_object();
 }
 
 function go_back(idx) {
-    idx--;
-    if(idx == -1 || idx >= {{ total_index }}){
-        idx++;
+    current_index--;
+    if(current_index == -1 || current_index >= {{ total_index }}){
+        current_index++;
     }
-    goto_current_index(files[idx]);
+    create_iframe_object();
 }
 
-function create_iframe_object(idx) {
-    path = "/api?action=epub_api&request=get_iframe_object&epub=%22{{ path }}%22&file=" + files[idx];
+function get_file_index(this_chapter) {
+    if(files.indexOf('OEBPS/'+this_chapter) != -1) this_chapter = 'OEBPS/'+this_chapter;
+    else if(files.indexOf('OPS/'+this_chapter) != -1) this_chapter = 'OPS/'+this_chapter;
+    return files.indexOf(this_chapter)
+}
+
+function get_current_index() {
+    for (let i = 0; i < chapters.length; i++) {
+        let this_chapter = chapters[i];
+        this_chapter = this_chapter[1];
+        if(i == chapters.length - 1){
+            return chapters[i][0];
+        }else{
+            if(current_index >= get_file_index(this_chapter) && current_index < get_file_index(chapters[i+1][1])){
+                return chapters[i][0];
+            }
+        }
+    }
+}
+
+function create_iframe_object() {
+    path = "/api?action=epub_api&request=get_iframe_object&epub=%22{{ path }}%22&file=" + files[current_index];
     $('#iframe').attr("src",path)
+    document.getElementById('window-title').innerText = 'Book·{{book["title"]}}';
+    document.getElementById('idx_count').innerText = 'Index: ' + current_index + '/' + {{ total_index }} + ' in ' + get_current_index();
 }
 </script>
 
@@ -47,7 +70,7 @@ function create_iframe_object(idx) {
     <div style="width: 90%;height: 100%;margin: 0 auto;">
         <h3>{{ book['title'] }}</h3>
         <h5>{{ book['author'] }}</h5>
-        <h5>Index: {{ now_index }}/{{ total_index }}</h5>
+        <h5 id='idx_count'>Index: {{ now_index }}/{{ total_index }}</h5>
         <iframe id="iframe" src="" style="width: 100%;height: 70%;margin: 0 auto;"></iframe><br>
         <a class="btn btn-primary" href="javascript:void(0);" onclick="back_to_indexing();">Index</a>
         <a class="btn btn-primary" href="javascript:void(0);" onclick="go_back({{now_index}});">Back</a>
