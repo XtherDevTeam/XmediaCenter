@@ -12,8 +12,19 @@ function init() {
     {% endfor %}
 }
 
+function get_origin_url(str) {
+    if(str.indexOf('#') != -1) str = str.substr(0,str.indexOf('#'))
+    if(str.indexOf('?') != -1) str = str.substr(0,str.indexOf('?'))
+    return str
+}
+
 function goto_current_index(str){
-    window.location = '/reader?path="{{path}}"&index=' + String(files.indexOf(str))
+    str = get_origin_url(str)
+    let index = 0;
+    if(files.indexOf('OEBPS/'+str) != -1) index = files.indexOf('OEBPS/'+str)
+    else if(files.indexOf('OPS/'+str) != -1) index = files.indexOf('OPS/'+str)
+    else index = files.indexOf(str)
+    window.location = '/reader?path="{{path}}"&index=' + String(index)
 }
 
 function back_to_indexing(){
@@ -38,9 +49,10 @@ function go_back(idx) {
 }
 
 function get_file_index(this_chapter) {
-    if(files.indexOf('OEBPS/'+this_chapter) != -1) this_chapter = 'OEBPS/'+this_chapter;
-    else if(files.indexOf('OPS/'+this_chapter) != -1) this_chapter = 'OPS/'+this_chapter;
-    return files.indexOf(this_chapter)
+    this_chapter = get_origin_url(this_chapter)
+    if(files.indexOf('OEBPS/'+this_chapter) != -1) {this_chapter = 'OEBPS/'+this_chapter;}
+    else if(files.indexOf('OPS/'+this_chapter) != -1) {this_chapter = 'OPS/'+this_chapter;}
+    return files.indexOf(this_chapter);
 }
 
 function get_current_index() {
@@ -50,6 +62,7 @@ function get_current_index() {
         if(i == chapters.length - 1){
             return chapters[i][0];
         }else{
+            console.log(current_index,get_file_index(this_chapter),this_chapter);
             if(current_index >= get_file_index(this_chapter) && current_index < get_file_index(chapters[i+1][1])){
                 return chapters[i][0];
             }
@@ -71,7 +84,7 @@ function create_iframe_object() {
         <h3>{{ book['title'] }}</h3>
         <h5>{{ book['author'] }}</h5>
         <h5 id='idx_count'>Index: {{ now_index }}/{{ total_index }}</h5>
-        <iframe id="iframe" src="" style="width: 100%;height: 70%;margin: 0 auto;"></iframe><br>
+        <iframe id="iframe" src="" style="width: 100%;height: 65%;margin: 0 auto;"></iframe><br>
         <a class="btn btn-primary" href="javascript:void(0);" onclick="back_to_indexing();">Index</a>
         <a class="btn btn-primary" href="javascript:void(0);" onclick="go_back({{now_index}});">Back</a>
         <a class="btn btn-primary" href="javascript:void(0);" onclick="go_next({{now_index}});">Next</a>

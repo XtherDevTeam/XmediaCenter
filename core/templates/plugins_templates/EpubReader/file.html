@@ -13,10 +13,23 @@ function init() {
 }
 init()
 
+function get_origin_url(str) {
+    if(str.indexOf('#') != -1) str = str.substr(0,str.indexOf('#'))
+    if(str.indexOf('?') != -1) str = str.substr(0,str.indexOf('?'))
+    return str
+}
+
 function goto_current_index(str){
-    if(files.indexOf('OEBPS/'+str) != -1) window.location = window.location + '&index=' + String(files.indexOf('OEBPS/'+str))
-    else if(files.indexOf('OPS/'+str) != -1) window.location = window.location + '&index=' + String(files.indexOf('OPS/'+str))
-    else window.location = window.location + '&index=' + String(files.indexOf(str))
+    str = get_origin_url(str)
+    let index = 0;
+    if(files.indexOf('OEBPS/'+str) != -1){
+        index = files.indexOf('OEBPS/'+str)
+    }
+    else if(files.indexOf('OPS/'+str) != -1){
+        index = files.indexOf('OPS/'+str)
+    }
+    else index = files.indexOf(str)
+    window.location = '/reader?path="{{path}}"&index=' + String(index)
 }
 
 </script>
