@@ -19,7 +19,7 @@ def response_with_file(path,request:flask.request):
         path = path[1:-1]
     try:
         is_preview = True
-        if get_mime(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path)) == 'application/octet-stream':
+        if get_mime(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path)).startswith('application'):
             is_preview = False
         else:
             is_preview = True
@@ -27,7 +27,6 @@ def response_with_file(path,request:flask.request):
         if request.headers.get('Range') != None:
             startIndex = 0
             part_length = 2 * 1024 * 1024
-            print(request.headers.get('Range')[request.headers.get('Range').find('='):request.headers.get('Range').find('-')])
             startIndex = int(request.headers.get('Range')[request.headers.get('Range').find('=')+1:request.headers.get('Range').find('-')])
             endIndex = startIndex + part_length - 1
             fileLength = os.path.getsize(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path))
@@ -42,14 +41,14 @@ def response_with_file(path,request:flask.request):
                 response_file = file.read(part_length)
 
             response = flask.make_response(response_file)
-
             response.headers['Accept-Ranges'] = 'bytes'
             response.headers['Content-Range'] = 'bytes ' + str(startIndex) + '-' + str(endIndex) + '/' + str(fileLength)
             response.headers['Content-Type'] = get_mime(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path))
+            if response.headers['Content-Type'].startswith('application'):
+                response.headers['Content-Disposition'] = "attachment; filename=" + core.api.get_filename(path)
 
             response.status_code = 206
             return response
-        
         return flask.send_file(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path),as_attachment=not is_preview,attachment_filename=core.api.get_filename(path),mimetype=get_mime(os.getcwd()+'/core/storage/' + core.api.getAbsPath(path)))
     except Exception as e:
         return json.dumps({ 'status':'error','reason':'Failed:' + str(e) })
