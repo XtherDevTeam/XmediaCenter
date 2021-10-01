@@ -21,7 +21,7 @@ def get_plugins_path_list():
     for i in requestCPR():
         path = i.cross_plugin_request([ 'get_path' ])
         if type(path).__name__ == 'str' and path == 'denied':
-            print('failed with denied')
+            pass
         else:
             ret.append([path,i.name])
     return ret
