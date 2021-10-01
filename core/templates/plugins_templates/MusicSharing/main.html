@@ -1,10 +1,10 @@
 <div style="width: 100%;height: 75px;overflow: hidden;">
 <img style="width: 75px;height: 75px;float: left;display: block;" src="/api?action=mmp_album_image&path={{song_info['path']}}">
 <div style="float: left;height: 100%;overflow: hidden;">
-    <div style="width: 90%;overflow: hidden;">{{ song_info['title'] }} - {{ song_info['album'] }} {{ song_info['performer'] }}<br></div>
+    <div style="width: 100%;overflow: hidden;height: 1.75rem;">{{ song_info['title'] }} - {{ song_info['album'] }} {{ song_info['performer'] }}<br></div>
     <div id='controler'>
         <audio id='source' src="/api?action=fm_api&request=download&path={{ song_info['path'] }}"></audio>
-        <input type="range" id="progress-bar" style="width: 100%;"/><br>
+        <input type="range" id="progress-bar" style="width: 90%;"/><br>
         <button onclick="changeState()">Play/Pause</button>
     </div>
 </div>
