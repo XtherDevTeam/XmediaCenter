@@ -2,3 +2,4 @@ ssl
 ddns
 *.json
 core/*.json
+*.pyc
